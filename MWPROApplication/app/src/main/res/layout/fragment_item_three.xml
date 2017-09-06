@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_weight="7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <mwpro.com.mwproapplication.ui.MyTableView
+                    xmlns:table="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/tableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    table:tableView_headerColor="@color/colorPrimary"
+                    table:tableView_columnCount="4"
+                    table:tableView_headerElevation="10"
+                    android:divider="#FFFFFF"
+                    android:dividerHeight="1dip"
+                    android:clickable="true"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <Button android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cancel_button"
+                        android:id="@+id/btn_mail_me"
+                        android:minHeight="50dp"
+                        android:text="Mail Me"
+                        android:textColor="@color/colorWhite"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

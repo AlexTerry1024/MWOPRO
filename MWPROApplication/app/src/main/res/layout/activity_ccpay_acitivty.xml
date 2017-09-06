@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#484848"
+            android:minHeight="50dp"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo"
+                android:layout_centerInParent="true"
+                />
+
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/topback"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/banner_button"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView android:id="@+id/ccpay_label_first_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_marginTop="20dp"
+                android:text="MONTANT"
+                android:gravity="center"
+                />
+            <TextView android:id="@+id/ccpay_label_second_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginTop="20dp"
+                android:text="MONTANT"
+                android:gravity="center"
+                />
+
+            <EditText android:id="@+id/idMoment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+
+                android:gravity="center"
+                android:singleLine="true"
+                />
+
+
+            <TextView android:id="@+id/ccpay_pin_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="MONTANT"
+
+                android:gravity="center"
+                />
+
+            <EditText android:id="@+id/ccpay_pin_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+
+                android:gravity="center"
+                android:singleLine="true"
+                />
+            <TextView android:id="@+id/ccpay_pin_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="MONTANT"
+
+                android:gravity="center"
+                />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:id="@+id/date"
+
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id ="@+id/card_view"
+                    android:layout_centerVertical="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id ="@+id/card_text"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/card_view"
+                    android:text="Hello world"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:id="@+id/ccpay_btns"
+
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="300dp"
+                    android:orientation="horizontal"
+                    >
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="130dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/cancel_button"
+                        android:id="@+id/ccpay_btn_annullar"
+                        android:text="ANNULER"
+                        android:textColor="@color/colorWhite"
+                        />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="130dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/cancel_button"
+                        android:id="@+id/ccpay_btn_valider"
+                        android:text="VALIDER"
+                        android:textColor="@color/colorWhite"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/cancel_button"
+                android:id="@+id/ccpay_btn_pincode"
+                android:text="VALIDER"
+                android:layout_below="@id/ccpay_btns"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="130dp"
+
+                android:id="@+id/ccpay_view_comment"
+                android:text="VALIDER"
+                android:layout_below="@id/ccpay_btn_pincode"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

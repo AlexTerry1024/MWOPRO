@@ -1,0 +1,337 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="Vouchers Setting"
+        android:layout_marginTop="20dp"
+        android:id="@+id/gift_title"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.6"
+            >
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/first"
+                    >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/gift_one_title"
+                            android:text="Gift1"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            >
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:maxLength="6"
+                                android:singleLine="true"
+                                android:gravity="center"
+                                android:minWidth="80dp"
+                                android:id="@+id/gift_one_result"
+                                android:inputType="numberDecimal"
+
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/gift_one_money"
+                                />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minWidth="150dp"
+                    android:id="@+id/second"
+                    android:layout_below="@+id/first"
+                    android:layout_marginTop="10dp"
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="Gift2"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/gift_two_title"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            >
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:maxLength="6"
+                                android:singleLine="true"
+                                android:gravity="center"
+                                android:minWidth="80dp"
+                                android:id="@+id/gift_two_result"
+                                android:inputType="numberDecimal"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/gift_two_money"
+                                />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minWidth="150dp"
+                    android:id="@+id/third"
+                    android:layout_below="@+id/second"
+                    android:layout_marginTop="10dp"
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="SponsoRed"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/sponso_red_title"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            >
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:maxLength="6"
+                                android:singleLine="true"
+                                android:gravity="center"
+                                android:minWidth="80dp"
+                                android:id="@+id/sponso_red_result"
+                                android:inputType="numberDecimal"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/sponso_red_result_money"
+                                />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="150dp"
+                    android:id="@+id/fourth"
+                    android:layout_below="@+id/third"
+                    android:layout_marginTop="10dp"
+
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="Sponso"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/sponso_title"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            >
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:maxLength="6"
+                                android:singleLine="true"
+                                android:gravity="center"
+                                android:minWidth="80dp"
+                                android:id="@+id/sponso_result"
+                                android:inputType="numberDecimal"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/sponso_result_money"
+                                />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="170dp"
+                    android:id="@+id/fifth"
+                    android:layout_below="@+id/fourth"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3.5"
+                        android:orientation="horizontal"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            >
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/btn_confirm"
+                                android:text="Confirm"
+
+                                android:layout_alignParentLeft="true"
+                                android:background="@drawable/cancel_button"
+                                android:textColor="@color/colorWhite"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            >
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            >
+                            <Button
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/btn_mail"
+                                android:layout_toRightOf="@+id/btn_confirm"
+                                android:text="Mailing"
+
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/cancel_button"
+                                android:textColor="@color/colorWhite"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.6"
+            >
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
+

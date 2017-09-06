@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="50dp"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?colorAccent"
+                android:layout_centerHorizontal="true"
+                android:text="Welcome to Mobiwoom"
+                android:layout_marginTop="20dp"
+                android:id="@+id/topText"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150dp"
+                android:id="@+id/start"
+                android:layout_centerInParent="true"
+                android:text="Start"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/cancel_button"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="D: 4.4.7"
+                android:layout_below="@+id/start"
+                android:layout_marginTop="20dp"
+                android:id="@+id/bottom_text"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
+

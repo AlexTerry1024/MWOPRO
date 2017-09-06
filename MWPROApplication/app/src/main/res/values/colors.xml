@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="thumb_color">#e3807d</color>
+    <color name="cancel_btn_pressed">#007897</color>
+    <color name="cancel_btn_nomal">#0078D7</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_trans">#99FFFFFF</color>
+    <!-- LIST BORDER COLOR -->
+    <color name="cell_border">#FFD3D3D3</color>
+
+    <!-- ITEM BACKGROUND COLOR - LINE - DEFAULT -->
+    <color name="base_start_color_line_default">#FFFFFFFF</color>
+    <color name="base_end_color_line_default">#FFFFFFFF</color>
+
+    <!-- ITEM BACKGROUND COLOR - LINE - PRESSED -->
+    <color name="base_start_color_line_pressed">#FF3590C4</color>
+    <color name="base_end_color_line_pressed">#FF2570BA</color>
+
+    <!-- ITEM TEXT COLORS - STATES - PRESSED AND DEFAULT -->
+    <color name="text_color_default">#000000</color>
+    <color name="text_color_pressed">#FFFFFF</color>
+
+    <!-- TEXT COLORS -->
+    <color name="text_color_header">#4C566C</color>
+    <color name="color_gray">#B4B4B4</color>
+    <color name="color_green">#00b4aa</color>
+    <color name="color_red">#FF6A6E</color>
+    <color name="color_red_light">#FFB4B6</color>
+    <color name="color_blue">#03A9F4</color>
+    <color name="color_gray_light">#F5F5F5</color>
+
+</resources>
