@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,9 +57,9 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
     TextView m_ctrlExternalTag = null;
     TextView m_ctrlMarket_company = null;
     EditText m_ctrlMarket_money = null;
-    TextView m_ctrlMarket_money_help = null;
+    TextInputLayout m_ctrlMarket_money_help = null;
     EditText m_ctrlMarket_telephony = null;
-    TextView m_ctrlMarket_telephony_help = null;
+    TextInputLayout m_ctrlMarket_telephony_help = null;
     Button m_ctrlMoney_btn_valider = null;
     Button m_ctrlMoney_btn_membre = null;
     Button m_ctrlCoupon1 = null;
@@ -79,9 +80,9 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         m_ctrlExternalTag = (TextView) findViewById(R.id.extenalTag);
         m_ctrlMarket_company = (TextView) findViewById(R.id.market_company);
         m_ctrlMarket_money = (EditText) findViewById(R.id.market_money);
-        m_ctrlMarket_money_help = (TextView) findViewById(R.id.market_money_help);
+        m_ctrlMarket_money_help = (TextInputLayout) findViewById(R.id.market_money_help);
         m_ctrlMarket_telephony = (EditText) findViewById(R.id.market_telephony);
-        m_ctrlMarket_telephony_help = (TextView) findViewById(R.id.market_telephony_help);
+        m_ctrlMarket_telephony_help = (TextInputLayout) findViewById(R.id.market_telephony_help);
         m_ctrlMoney_btn_valider = (Button) findViewById(R.id.money_btn_valider);
         m_ctrlMoney_btn_membre = (Button) findViewById(R.id.money_btn_membre);
         m_ctrlCoupon1 = (Button) findViewById(R.id.coupon1);
@@ -177,16 +178,18 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
 
         m_ctrlCoupon1.setText(getButtonName("lb_coupon",  Constants.CurrentLang) + " " + Constants.currentMarket.market_coupon_1 + getButtonName("lb_coupon_money", Constants.CurrentLang));
         m_ctrlCoupon2.setText(getButtonName("lb_coupon",  Constants.CurrentLang) + " " + Constants.currentMarket.market_coupon_2 + getButtonName("lb_coupon_money", Constants.CurrentLang));
-        m_ctrlMarket_telephony_help.setText(getButtonName("lab_tel",  Constants.CurrentLang));
-        m_ctrlMarket_money_help.setText(getButtonName("lab_montant",  Constants.CurrentLang));
+        m_ctrlMarket_telephony_help.setHint(getButtonName("lab_tel",  Constants.CurrentLang));
+        m_ctrlMarket_money_help.setHint(getButtonName("lab_montant",  Constants.CurrentLang));
         m_ctrlMoney_btn_valider.setText(getButtonName("btn_scanner",  Constants.CurrentLang));
         m_ctrlMoney_btn_membre.setText(getButtonName("btn_vip",  Constants.CurrentLang));
-
+        m_ctrlMarket_company.setText(Constants.currentMarket.market_name);
         m_ctrlCoupon1.setOnClickListener(this);
         m_ctrlCoupon2.setOnClickListener(this);
         m_ctrlMoney_btn_membre.setOnClickListener(this);
         Constants.ExecutePaymentAfterVip = false;
         m_ctrlMarket_money.setSelection(m_ctrlMarket_money.getText().toString().length());
+
+        m_ctrlMarket_money.requestFocus();
     }
 
     public String formatDate(String date, String pays)
@@ -226,6 +229,17 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(ShowMoneyActivity.this, MainActivity.class);
+
+        startActivity(i);
+
+        finish();
+    }
+
     public String getButtonName(String strTagName, String strLanguage)
     {
         String strResult = "";
@@ -398,10 +412,6 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
                 try {
                     MyXmlToJSON(str);
                     interpertValider();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -414,7 +424,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         }
     };
 
-    public void interpertValider() throws XmlPullParserException, IOException, JSONException {
+    public void interpertValider() throws JSONException {
 
         String strTagName = "";
         String strUserPhoneNumber = "";
@@ -747,10 +757,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
                 try {
                     MyXmlToJSON(str);
                     executePaymentInterpret();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -765,7 +772,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
             }
         }
     };
-    public void executePaymentInterpret() throws XmlPullParserException, IOException, JSONException {
+    public void executePaymentInterpret() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -950,11 +957,9 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
                     Constants.viewVipText2 = getButtonName("lab_creer_vip", Constants.CurrentLang);
 
                     Intent i = new Intent(ShowMoneyActivity.this, VIPActivity.class);
-
                     startActivity(i);
-
-                    dialog.dismiss();
                     finish();
+                    dialog.dismiss();
                 }
 
                 @Override

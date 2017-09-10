@@ -7,12 +7,19 @@
     <color name="thumb_color">#e3807d</color>
     <color name="cancel_btn_pressed">#007897</color>
     <color name="cancel_btn_nomal">#0078D7</color>
+
+    <color name="valider_btn_nomal">#43D509</color>
+    <color name="valider_btn_focus">#18AF00</color>
+
+    <color name="gift_btn_nomal">#439cf9</color>
+    <color name="gift_btn_focus">#FF4081</color>
+
     <color name="white">#FFFFFF</color>
     <color name="white_trans">#99FFFFFF</color>
-    <!-- LIST BORDER COLOR -->
+
     <color name="cell_border">#FFD3D3D3</color>
 
-    <!-- ITEM BACKGROUND COLOR - LINE - DEFAULT -->
+
     <color name="base_start_color_line_default">#FFFFFFFF</color>
     <color name="base_end_color_line_default">#FFFFFFFF</color>
 

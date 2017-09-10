@@ -5,16 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+
+        >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#484848"
+            android:layout_height="match_parent"
             android:minHeight="50dp"
+            android:fitsSystemWindows="true"
             >
             <ImageView
                 android:layout_width="match_parent"
@@ -22,8 +25,6 @@
                 android:src="@drawable/logo"
                 android:layout_centerInParent="true"
                 />
-
-
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -34,12 +35,12 @@
                 android:id="@+id/banner_button"
                 />
         </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
         >
         <TextView
             android:id="@+id/extenalTag"
@@ -51,7 +52,7 @@
             android:text="hello world"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             />
 
         <TextView
@@ -60,94 +61,111 @@
             android:layout_height="wrap_content"
             android:minWidth="300dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+
             android:text="MOBIWOOM DEMO"
             android:gravity="center"
             />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="300dp"
-            android:maxWidth="300dp"
-            android:id="@+id/market_money"
-            android:text="0.00"
-            android:layout_marginTop="10dp"
-            android:inputType="numberDecimal"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="300dp"
-            android:maxWidth="300dp"
-            android:id="@+id/market_money_help"
-            android:text="ENTREZLE MONTANT"
-            android:layout_marginTop="10dp"
-            android:inputType="numberDecimal"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerHorizontal="true"
+                    >
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="300dp"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/market_money_help"
+                        >
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="300dp"
+                            android:maxWidth="300dp"
+                            android:id="@+id/market_money"
+                            android:text="0.00"
+                            android:inputType="numberDecimal"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
 
-            />
+                            />
+                    </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="300dp"
-            android:maxWidth="300dp"
-            android:id="@+id/market_telephony"
-            android:text=""
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:inputType="phone"
-            android:layout_gravity="center_horizontal"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="300dp"
-            android:maxWidth="300dp"
-            android:id="@+id/market_telephony_help"
-            android:text="ENTREZLE MONTANT"
-            android:layout_marginTop="10dp"
-            android:inputType="numberDecimal"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="150dp"
-            android:maxWidth="150dp"
-            android:id="@+id/money_btn_valider"
-            android:text="VALIDER"
-            android:layout_marginTop="10dp"
-            android:inputType="numberDecimal"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/cancel_button"
-            android:textColor="@color/colorWhite"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="150dp"
-            android:maxWidth="150dp"
-            android:id="@+id/money_btn_membre"
-            android:text="MEMBRE"
-            android:layout_marginTop="10dp"
-            android:inputType="numberDecimal"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/cancel_button"
-            android:textColor="@color/colorWhite"
-            />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="300dp"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/market_telephony_help"
+                        >
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="300dp"
+                            android:maxWidth="300dp"
+                            android:id="@+id/market_telephony"
+                            android:text=""
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:layout_gravity="center_horizontal"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:maxWidth="150dp"
+                        android:id="@+id/money_btn_valider"
+                        android:text="VALIDER"
+                        android:layout_marginTop="20dp"
+                        android:inputType="numberDecimal"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/valider_button"
+                        android:textColor="@color/colorWhite"
+                        android:textIsSelectable="false"
+
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:maxWidth="150dp"
+                        android:id="@+id/money_btn_membre"
+                        android:text="MEMBRE"
+                        android:layout_marginTop="20dp"
+                        android:inputType="numberDecimal"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/cancel_button"
+                        android:textColor="@color/colorWhite"
+                        android:textIsSelectable="false"
+                        />
+
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:minWidth="260dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="55dp"
             android:visibility="visible"
             >
             <Button
@@ -155,10 +173,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="125dp"
-                android:background="@drawable/cancel_button"
+                android:background="@drawable/gift_button"
                 android:text="Hello"
                 android:textColor="@color/colorWhite"
                 android:layout_gravity="center"
+                android:textIsSelectable="false"
                 />
             <LinearLayout
                 android:layout_width="10dp"
@@ -173,10 +192,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="125dp"
-                android:background="@drawable/cancel_button"
+                android:background="@drawable/gift_button"
                 android:text="World"
                 android:textColor="@color/colorWhite"
                 android:layout_gravity="center"
+                android:textIsSelectable="false"
+
                 />
 
         </LinearLayout>

@@ -27,15 +27,17 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import mwpro.com.mwproapplication.data.UserVo;
+import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 import retrofit2.http.GET;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 
-public class ViewNFCAssign extends AppCompatActivity {
+public class ViewNFCAssign extends Activity {
 
     ImageView m_ctrlBannerButton = null;
     TextView m_ctrlTitle = null;
@@ -101,6 +103,19 @@ public class ViewNFCAssign extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UserSetAndParse(m_ctrlPhone.getText().toString(), "", "", "", m_ctrlNfcNumber.getText().toString(), "",  "", (int)Constants.currentMontant,_couponIndex);
+            }
+        });
+
+        m_ctrlBannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ViewNFCAssign.this, getButtonName("lab_PayCancel", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
+
+                startActivity(i);
+
+                finish();
             }
         });
     }
@@ -169,22 +184,30 @@ public class ViewNFCAssign extends AppCompatActivity {
                 try {
                     MyXmlToJSON(str);
                     InterpretUserSetAndParse(str);
-                } catch (IOException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
-                } catch (JSONException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
+                vibrate(ViewNFCAssign.this);
+
                 Toast.makeText(ViewNFCAssign.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
+
+                startActivity(i);
+
+                finish();
 
                 return;
             }
         }
     };
 
-    public void InterpretUserSetAndParse(String str) throws IOException, XmlPullParserException, JSONException {
+    public void InterpretUserSetAndParse(String str) throws JSONException, IOException, XmlPullParserException {
 
         String strUser_Phone = "";
 
@@ -202,7 +225,7 @@ public class ViewNFCAssign extends AppCompatActivity {
             return;
         } else if (Constants.ErrorNumber.equals("30")) {
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ViewNFCAssign.this);
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -211,7 +234,7 @@ public class ViewNFCAssign extends AppCompatActivity {
             return;
         } else if (Constants.ErrorNumber.equals("31")) {
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ViewNFCAssign.this);
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -220,7 +243,7 @@ public class ViewNFCAssign extends AppCompatActivity {
             return;
         } else if (Constants.ErrorNumber.equals("241")) {
             //   erreurHome = _controller.res.g('pEvt.result.ErrorMessage');
-
+            vibrate(ViewNFCAssign.this);
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -228,7 +251,7 @@ public class ViewNFCAssign extends AppCompatActivity {
             finish();
             return;
         } else if (Constants.ErrorNumber.equals("243")) {
-            //    erreurHome = _controller.res.g('lab_UserPhoneExistAsPartner');
+            vibrate(ViewNFCAssign.this);
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
@@ -237,7 +260,7 @@ public class ViewNFCAssign extends AppCompatActivity {
             finish();
             return;
         } else if (!Constants.ErrorNumber.equals("0")) {
-            //    erreurHome = _controller.res.g('lab_vip_no_ok');
+            vibrate(ViewNFCAssign.this);
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_vip_no_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
@@ -273,6 +296,8 @@ public class ViewNFCAssign extends AppCompatActivity {
                 Intent i = new Intent(ViewNFCAssign.this, ViewStatusActivity.class);
 
                 startActivity(i);
+
+                finish();
             }
         }else
         {
@@ -281,6 +306,8 @@ public class ViewNFCAssign extends AppCompatActivity {
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
+
+            finish();
         }
     }
     public  void giveCoupon(int pIndex){
@@ -463,10 +490,11 @@ public class ViewNFCAssign extends AppCompatActivity {
             if(msg.arg2 != Constants.NET_ERR)
             {
                 try {
+                    MyXmlToJSON(str);
+
                     executePaymentInterpret(str);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
@@ -475,74 +503,51 @@ public class ViewNFCAssign extends AppCompatActivity {
 
                 Intent i = new Intent(ViewNFCAssign.this, ViewStatusActivity.class);
                 startActivity(i);
+                finish();
             }
         }
     };
-    public  void executePaymentInterpret(String strData) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
+    public  void executePaymentInterpret(String strData) throws JSONException {
 
-        xpp.setInput(new StringReader(strData));
-        int eventType = xpp.getEventType();
         String strTagName = "";
-
         String strMessage = "";
         String strProcessToken = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
 
-            if (eventType == XmlPullParser.START_DOCUMENT) {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
-            } else if (eventType == XmlPullParser.START_TAG) {
-                strTagName = xpp.getName();
+        if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
+        {
+            if (Constants.currentMarket.market_cb == false) {
 
-            } else if (eventType == XmlPullParser.END_TAG) {
+                Toast.makeText(ViewNFCAssign.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-            } else if (eventType == XmlPullParser.TEXT) {
+                Constants.AmountCB = Constants.currentMarket.market_ToPay;
 
-                if (strTagName != null && strTagName.equals("ErrorNumber")) {
-                    Constants.ErrorNumber = xpp.getText();
-                    if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
-                    {
-                        if (Constants.currentMarket.market_cb == false) {
+                Intent i = new Intent(ViewNFCAssign.this, ViewCreditCard.class);
 
-                            Toast.makeText(ViewNFCAssign.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+                startActivity(i);
 
-                            Constants.AmountCB = Constants.currentMarket.market_ToPay;
+                finish();
 
-                            Intent i = new Intent(ViewNFCAssign.this, ViewCreditCard.class);
+                return;
 
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-
-                        }
-                        else {
-                            Toast.makeText(ViewNFCAssign.this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                            Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
-
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-                        }
-                    }
-                }
-                if (strTagName != null && strTagName.equals("Message")) {
-                    strMessage = xpp.getText();
-                }
-
-                if (strTagName != null && strTagName.equals("ProcessToken")) {
-                    strProcessToken = xpp.getText();
-                }
             }
+            else {
+                Toast.makeText(ViewNFCAssign.this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-            eventType = xpp.next();
+                Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
+
+                startActivity(i);
+
+                finish();
+
+                return;
+            }
         }
+
+        strMessage = GetMatchString("Message");
+        strProcessToken = GetMatchString("ProcessToken");
+
         if (Constants.ErrorNumber.equals("0")) {
             Constants.ProcessToken = strProcessToken;
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();

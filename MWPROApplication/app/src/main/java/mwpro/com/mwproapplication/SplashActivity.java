@@ -1,5 +1,6 @@
 package mwpro.com.mwproapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -22,8 +23,9 @@ import okhttp3.OkHttpClient;
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
     private Thread mThread;
     private boolean isFinish = false;
     OkHttpClient m_ctrlOKHttpClient = null;
@@ -162,7 +164,13 @@ public class SplashActivity extends AppCompatActivity {
 
             if(msg.arg2 == Constants.NET_ERR)
             {
+                vibrate(SplashActivity.this);
+
                 Toast.makeText(SplashActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(SplashActivity.this, MainActivity.class);
+
+                startActivity(i);
 
                 finish();
 
@@ -184,9 +192,23 @@ public class SplashActivity extends AppCompatActivity {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
-        if(!Constants.ErrorNumber.equals("0")) {
+        if(Constants.ErrorNumber.equals("11")) {
 
             Toast.makeText(SplashActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+            Intent i = new Intent(SplashActivity.this, MainActivity.class);
+
+            startActivity(i);
+
+            finish();
+
+            return;
+        }
+
+        if(!Constants.ErrorNumber.equals("0")) {
+
+            vibrate(SplashActivity.this);
+            Toast.makeText(SplashActivity.this, getButtonName("lab_ErrorLogin", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
 
@@ -210,6 +232,8 @@ public class SplashActivity extends AppCompatActivity {
         if(nResult == 2)
         {
             Toast.makeText(SplashActivity.this, getButtonName("lab_PayCancel", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+            vibrate(SplashActivity.this);
 
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
 

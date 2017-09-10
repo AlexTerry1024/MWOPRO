@@ -31,6 +31,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -52,10 +53,12 @@ import java.io.StringReader;
 import java.text.DecimalFormat;
 
 import mwpro.com.mwproapplication.data.MyTitles;
+import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 public class ViewCoupon extends Fragment implements View.OnClickListener{
 
@@ -164,19 +167,19 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         {
             m_ctrlGift_One_Result.setText(Constants.currentMarket.market_coupon_1);
 
-            m_ctrlGift_One_Result.setSelection(Constants.currentMarket.market_coupon_1.length());
+            m_ctrlGift_One_Result.extendSelection(Constants.currentMarket.market_coupon_1.length());
 
             m_ctrlGift_Two_Result.setText(Constants.currentMarket.market_coupon_2);
 
-            m_ctrlGift_Two_Result.setSelection(Constants.currentMarket.market_coupon_2.length());
+            m_ctrlGift_Two_Result.extendSelection(Constants.currentMarket.market_coupon_2.length());
 
             m_ctrlSponso_Result.setText(Constants.currentMarket.market_coupon_Sponsor);
 
-            m_ctrlSponso_Result.setSelection(Constants.currentMarket.market_coupon_Sponsor.length());
+            m_ctrlSponso_Result.extendSelection(Constants.currentMarket.market_coupon_Sponsor.length());
 
             m_ctrlSponso_Red_Result.setText(Constants.currentMarket.market_coupon_Sponsored);
 
-            m_ctrlSponso_Red_Result.setSelection(Constants.currentMarket.market_coupon_Sponsored.length());
+            m_ctrlSponso_Red_Result.extendSelection(Constants.currentMarket.market_coupon_Sponsored.length());
         }
         customDialog = new CustomProgressDialog(getContext(), "");
 
@@ -273,6 +276,47 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
 
         m_ctrlBtnConfirm.setOnClickListener(this);
         m_ctrlBtnMailing.setOnClickListener(this);
+
+        m_ctrlGift_One_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlGift_One_Result.setSelection(m_ctrlGift_One_Result.getText().toString().length());
+                m_ctrlGift_One_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlGift_Two_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlGift_Two_Result.setSelection(m_ctrlGift_Two_Result.getText().toString().length());
+
+                m_ctrlGift_Two_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlSponso_Red_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlSponso_Red_Result.setSelection(m_ctrlSponso_Red_Result.getText().toString().length());
+                m_ctrlSponso_Red_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlSponso_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlSponso_Result.setSelection(m_ctrlSponso_Result.getText().toString().length());
+                m_ctrlSponso_Result.requestFocus();
+                return false;
+            }
+        });
 
         return view;
     }
@@ -429,15 +473,14 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
 
                 Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ViewCoupon.this.getActivity());
+
                 return;
             } else {
                 try {
                     MyXmlToJSON(str);
                     interpretMailing();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -445,7 +488,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         }
     };
 
-    public void interpretMailing() throws XmlPullParserException, IOException, JSONException {
+    public void interpretMailing() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -541,6 +584,8 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
             if(msg.arg2 != Constants.NET_SUC) {
                 Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ViewCoupon.this.getActivity());
+
                 return;
             }
 
@@ -573,6 +618,8 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         if(Constants.ErrorNumber.equals("3")) {
             Toast.makeText(ViewCoupon.this.getContext(), getButtonName("lab_CB_Error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(ViewCoupon.this.getActivity());
+
             Intent i = new Intent(ViewCoupon.this.getContext(), ViewCCList.class);
 
             startActivity(i);
@@ -592,6 +639,8 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
             {
                 Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ViewCoupon.this.getActivity());
+
                 return;
             }else
             {
@@ -600,10 +649,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
                     MyXmlToJSON(str);
 
                     interpretValid();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -611,7 +657,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         }
     };
 
-    public void interpretValid() throws XmlPullParserException, IOException, JSONException {
+    public void interpretValid() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -670,17 +716,14 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
                 MyXmlToJSON(str);
 
                 interpretRealMailing();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    public void interpretRealMailing() throws XmlPullParserException, IOException, JSONException {
+    public void interpretRealMailing() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 

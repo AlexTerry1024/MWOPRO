@@ -1,5 +1,6 @@
 package mwpro.com.mwproapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -28,8 +29,9 @@ import mwpro.com.mwproapplication.ui.wheel.WheelView;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
-public class ViewCreditCard extends AppCompatActivity implements View.OnClickListener{
+public class ViewCreditCard extends Activity implements View.OnClickListener{
     ImageView m_ctrlBannerButton = null;
     TextView m_ctrlTitle = null;
     WheelView m_ctrlSpinner = null;
@@ -62,11 +64,6 @@ public class ViewCreditCard extends AppCompatActivity implements View.OnClickLis
             MyXmlToJSON(data);
 
             interpret();
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -135,6 +132,26 @@ public class ViewCreditCard extends AppCompatActivity implements View.OnClickLis
         m_ctrlCardYear.setViewAdapter(new DateArrayAdapter(ViewCreditCard.this, yearType, 0));
         m_ctrlValider.setOnClickListener(this);
         m_ctrlAnnuller.setOnClickListener(this);
+        m_ctrlBannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ViewCreditCard.this, getButtonName("lab_PayCancel", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                if(Constants.IdPayClick == true)
+                {
+                    Intent i = new Intent(ViewCreditCard.this, ShowMoneyActivity.class);
+
+                    startActivity(i);
+                }else
+                {
+                    Intent i = new Intent(ViewCreditCard.this, ViewCCList.class);
+
+                    startActivity(i);
+                }
+
+                finish();
+            }
+        });
     }
 
     @Override
@@ -186,15 +203,25 @@ public class ViewCreditCard extends AppCompatActivity implements View.OnClickLis
 
             if(m_ctrlCardYear.getCurrentItem() == 0)
             {
+                vibrate(ViewCreditCard.this);
+
+                Toast.makeText(ViewCreditCard.this, getButtonName("lab_CBnotRegistered", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
                 return;
             }
             if(m_ctrlCardMonth.getCurrentItem() == 0)
             {
+                vibrate(ViewCreditCard.this);
+                Toast.makeText(ViewCreditCard.this, getButtonName("lab_CBnotRegistered", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
                 return;
             }
 
             if(m_ctrlCardNumber.getText().toString().trim().equals(""))
             {
+                vibrate(ViewCreditCard.this);
+                Toast.makeText(ViewCreditCard.this, getButtonName("lab_CBnotRegistered", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
                 return;
             }
             String strApi = "";
@@ -264,7 +291,7 @@ public class ViewCreditCard extends AppCompatActivity implements View.OnClickLis
         }
         return ret;
     }
-    public void interpret() throws XmlPullParserException, IOException, JSONException {
+    public void interpret() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -323,6 +350,8 @@ public class ViewCreditCard extends AppCompatActivity implements View.OnClickLis
             Intent i = new Intent(ViewCreditCard.this, ViewCCPay.class);
 
             startActivity(i);
+
+            finish();
 
             return;
         }else

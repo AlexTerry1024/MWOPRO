@@ -1,5 +1,6 @@
 package mwpro.com.mwproapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -37,8 +38,9 @@ import mwpro.com.mwproapplication.ui.MyTableView;
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
-public class ViewCCList extends AppCompatActivity implements View.OnClickListener{
+public class ViewCCList extends Activity implements View.OnClickListener{
 
     MyTableView m_ctrlTableView = null;
     MySimpleTableHeaderAdapter adapter = null;
@@ -177,18 +179,14 @@ public class ViewCCList extends AppCompatActivity implements View.OnClickListene
                 MyXmlToJSON(strObj);
 
                 interpret();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
-    public void interpret() throws IOException, XmlPullParserException, JSONException {
-       Constants.ErrorNumber = GetMatchString("ErrorNumber");
-
+    public void interpret() throws JSONException {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
         if(Constants.ErrorNumber.equals("11")) {
             Toast.makeText(ViewCCList.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -203,7 +201,11 @@ public class ViewCCList extends AppCompatActivity implements View.OnClickListene
         }else if(!Constants.ErrorNumber.equals("0")) {
             m_ctrlChange.setEnabled(true);
 
+            vibrate(ViewCCList.this);
+
             Toast.makeText(ViewCCList.this, getButtonName("lab_CBnotRegistered", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+            Constants.currentMarket.market_cb = false;
 
             return;
         }

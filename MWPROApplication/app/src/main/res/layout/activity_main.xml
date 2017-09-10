@@ -4,44 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-    <LinearLayout
+    android:orientation="vertical"
+
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        android:orientation="vertical">
-            <RelativeLayout
+        android:background="?attr/colorPrimary"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="50dp"
+            android:fitsSystemWindows="true"
+            >
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#484848"
-                android:minHeight="50dp"
-                >
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logo"
-                    android:layout_centerInParent="true"
-                    />
-
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/topback"
-                    android:layout_marginLeft="5dp"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/banner_button"
-                    />
-            </RelativeLayout>
-
-    </LinearLayout>
+                android:src="@drawable/logo"
+                android:layout_centerInParent="true"
+                />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/topback"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/banner_button"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-
+        android:orientation="vertical"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,112 +48,110 @@
             android:orientation="vertical"
             android:gravity="center"
             >
-            <TextView
-                android:layout_width="match_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TELEPHONE"
-                android:id="@+id/mark_phone_number"
-                />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mark_phone_number"
-                android:id="@+id/phone_number"
                 android:minWidth="300dp"
-                android:lines="1"
-                android:gravity="center"
-                android:maxLines="1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:imeOptions="actionNone"
-                android:maxLength="20"
-                android:inputType="phone"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PINCODE"
-                android:layout_below="@+id/phone_number"
-                android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/mark_pincode_number"
                 android:layout_gravity="center_horizontal"
-                />
+                android:id="@+id/phone_number_help"
+                >
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/phone_number"
+                    android:minWidth="300dp"
+                    android:lines="1"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:imeOptions="actionNone"
+                    android:maxLength="20"
+                    android:inputType="phone"
 
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300dp"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/phone_pin_help"
+                >
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/pincode"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/mark_pincode_number"
-                android:id="@+id/pincode"
-                android:minWidth="300dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
-                android:lines="1"
-                android:maxLines="1"
-                android:maxLength="10"
-                android:gravity="center"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:gravity="center"
                 android:inputType="textPassword"
-                android:layout_gravity="center_horizontal"
-                />
+                android:lines="1"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:minWidth="300dp"
+                android:singleLine="true"
 
+                />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/pincode"
-                android:minWidth="250dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:text="LOGIN"
-                android:background="@drawable/cancel_button"
-                android:textColor="@color/colorWhite"
                 android:layout_gravity="center_horizontal"
-                />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/valider_button"
+                android:minWidth="300dp"
+                android:text="LOGIN"
+                android:textColor="@color/colorWhite" />
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/btn_pincode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/btn_login"
-                android:minWidth="250dp"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/cancel_button"
+                android:minWidth="300dp"
                 android:text="PINCODE"
-                android:background="@drawable/cancel_button"
-                android:textColor="@color/colorWhite"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center_horizontal"
-                />
+                android:textColor="@color/colorWhite" />
+
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/btn_signup"
-                android:minWidth="250dp"
-                android:text="SIGN UP"
-                android:background="@drawable/cancel_button"
-                android:textColor="@color/colorWhite"
-                android:layout_below="@+id/btn_pincode"
-                android:layout_alignStart="@+id/btn_pincode"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center_horizontal"
-                />
-            <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_activate"
-                android:layout_below="@+id/btn_signup"
-                android:minWidth="250dp"
-                android:layout_centerHorizontal="true"
-                android:text="ACTIVATE"
+                android:layout_alignStart="@+id/btn_pincode"
+                android:layout_below="@+id/btn_pincode"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/cancel_button"
-                android:textColor="@color/colorWhite"
+                android:minWidth="300dp"
+                android:text="SIGN UP"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/btn_activate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_signup"
+                android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                />
+                android:layout_marginTop="5dp"
+                android:background="@drawable/cancel_button"
+                android:minWidth="300dp"
+                android:text="ACTIVATE"
+                android:textColor="@color/colorWhite" />
 
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_text_state"
@@ -171,8 +168,16 @@
                 app:kswTintColor="@color/custom_back_color"
                 android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
-                />
+                android:visibility="gone"
 
+                />
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:spinnerMode="dialog"
+                >
+            </android.support.v7.widget.AppCompatSpinner>
         </LinearLayout>
     </LinearLayout>
 

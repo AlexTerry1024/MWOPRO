@@ -5,16 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+
+        >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#484848"
+            android:layout_height="match_parent"
             android:minHeight="50dp"
+            android:fitsSystemWindows="true"
             >
             <ImageView
                 android:layout_width="match_parent"
@@ -22,8 +25,6 @@
                 android:src="@drawable/logo"
                 android:layout_centerInParent="true"
                 />
-
-
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -34,8 +35,7 @@
                 android:id="@+id/banner_button"
                 />
         </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,8 +44,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+
             android:paddingTop="15dp"
             android:scrollIndicators="none"
             android:scrollbars="none"
@@ -55,104 +54,174 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
-                <EditText
-                    android:id="@+id/biz_phone_number"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:inputType="textPhonetic"
-                    android:hint="Biz Phone Number"
-                    />
-                <EditText
-                    android:id="@+id/email"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:inputType="textEmailAddress"
-                    android:hint="Email"
-                    />
-                <EditText
-                    android:id="@+id/business_name"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
+                    android:id="@+id/phone_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/biz_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:inputType="phone"
 
-                    android:hint="Business Name"
-                    />
-                <EditText
-                    android:id="@+id/address"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:hint="Address"
+                    android:id="@+id/email_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:inputType="textEmailAddress"
 
-                    />
-                <EditText
-                    android:id="@+id/zipcode"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:hint="Zipcode"
+                    android:id="@+id/bussiness_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/business_name"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
 
-                    />
 
-                <EditText
-                    android:id="@+id/city"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:hint="City"
+                    android:id="@+id/address_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/address"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
 
-                    />
 
-                <EditText
-                    android:id="@+id/member_cashback"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:hint="Member Cashback"
-                    android:inputType="numberDecimal"
+                    android:id="@+id/zip_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/zipcode"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
 
-                    />
-                <EditText
-                    android:id="@+id/vip_cashback"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:hint="VIP Cashback"
-                    android:inputType="numberDecimal"
-                    />
+                    android:id="@+id/city_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/city"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+
+
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/member_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/member_cashback"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+
+                        android:inputType="numberDecimal"
+
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vip_hint"
+                    android:minWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/vip_cashback"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+
+                        android:inputType="numberDecimal"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

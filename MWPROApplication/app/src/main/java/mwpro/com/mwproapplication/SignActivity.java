@@ -1,4 +1,5 @@
 package mwpro.com.mwproapplication;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,8 +7,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,12 +22,14 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,8 +39,9 @@ import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
-public class SignActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignActivity extends Activity implements View.OnClickListener{
 
     EditText m_ctrlBizNumber = null;
     EditText m_ctrlEmail = null;
@@ -48,12 +55,19 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     Button m_ctrlApply = null;
     Button m_ctrlCancel = null;
     ImageView m_ctrlBanner = null;
-    CustomProgressDialog customProgressDialog = null;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign);
 
+    TextInputLayout m_ctrlPhone_Hint = null;
+    TextInputLayout m_ctrlEmail_Hint = null;
+    TextInputLayout m_ctrlBusinessName_Hint = null;
+    TextInputLayout m_ctrlAddress_Hint = null;
+    TextInputLayout m_ctrlZip_Hint = null;
+    TextInputLayout m_ctrlCity_Hint = null;
+    TextInputLayout m_ctrlMember_Hint = null;
+    TextInputLayout m_ctrlVip_Hint = null;
+    CustomProgressDialog customProgressDialog = null;
+
+    public void ControlLink()
+    {
         m_ctrlBizNumber = (EditText)findViewById(R.id.biz_phone_number);
         m_ctrlEmail = (EditText)findViewById(R.id.email);
         m_ctrlBusinessName = (EditText)findViewById(R.id.business_name);
@@ -65,26 +79,91 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         m_ctrlApply = (Button)findViewById(R.id.confirm);
         m_ctrlCancel = (Button)findViewById(R.id.cancel);
         m_ctrlBanner = (ImageView)findViewById(R.id.banner_button);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        m_ctrlBizNumber.setHint(getButtonName("lab_PhonePro", Constants.CurrentLang));
-        m_ctrlEmail.setHint(getButtonName("lab_email", Constants.CurrentLang));
-        m_ctrlBusinessName.setHint(getButtonName("lab_PartnerName", Constants.CurrentLang));
-        m_ctrlAddress.setHint(getButtonName("lab_address", Constants.CurrentLang));
-        m_ctrlZipCode.setHint(getButtonName("lab_ZipCode", Constants.CurrentLang));
-        m_ctrlCity.setHint(getButtonName("lab_city", Constants.CurrentLang));
-        m_ctrlMemberCashBack.setHint(getButtonName("lab_CBMember", Constants.CurrentLang));
-        m_ctrlVIPCashBack.setHint(getButtonName("lab_CBVIP", Constants.CurrentLang));
+        m_ctrlPhone_Hint = (TextInputLayout)findViewById(R.id.phone_hint);
+        m_ctrlEmail_Hint = (TextInputLayout)findViewById(R.id.email_hint);
+        m_ctrlBusinessName_Hint = (TextInputLayout)findViewById(R.id.bussiness_hint);
+        m_ctrlAddress_Hint = (TextInputLayout)findViewById(R.id.address_hint);
+        m_ctrlZip_Hint = (TextInputLayout)findViewById(R.id.zip_hint);
+        m_ctrlCity_Hint = (TextInputLayout)findViewById(R.id.city_hint);;
+        m_ctrlMember_Hint = (TextInputLayout)findViewById(R.id.member_hint);
+        m_ctrlVip_Hint = (TextInputLayout)findViewById(R.id.vip_hint);
 
-        m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
-        m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
         m_ctrlApply.setOnClickListener(this);
         m_ctrlCancel.setOnClickListener(this);
         m_ctrlBanner.setOnClickListener(this);
 
+        customProgressDialog = new CustomProgressDialog(this, "");
+
+        m_ctrlMemberCashBack.setText("0.00");
+        m_ctrlVIPCashBack.setText("0.00");
+        m_ctrlVIPCashBack.addTextChangedListener(amount(m_ctrlVIPCashBack));
+        m_ctrlMemberCashBack.addTextChangedListener(amount(m_ctrlMemberCashBack));
+        m_ctrlMemberCashBack.extendSelection(m_ctrlMemberCashBack.getText().toString().length());
+        m_ctrlVIPCashBack.extendSelection(m_ctrlVIPCashBack.getText().toString().length());
+    }
+
+    public static TextWatcher amount(final EditText editText) {
+        return new TextWatcher() {
+            String current = "";
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals(current)) {
+                    editText.removeTextChangedListener(this);
+
+                    String cleanString = s.toString();
+
+                    if (count != 0) {
+                        String substr = cleanString.substring(cleanString.length() - 2);
+
+                        if (substr.contains(".") || substr.contains(",")) {
+                            cleanString += "0";
+                        }
+                    }
+
+                    cleanString = cleanString.replaceAll("[.]", "");
+
+                    double parsed = Double.parseDouble(cleanString);
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    String formatted = df.format((parsed / 100));
+                    formatted = formatted.replaceAll("[,]", ".");
+                    current = formatted;
+                    editText.setText(formatted);
+                    editText.setSelection(formatted.length());
+
+                    editText.addTextChangedListener(this);
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void afterTextChanged(Editable s) {}
+        };
+    }
+    public void setData()
+    {
+        m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
+        m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
         m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
         m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
 
-        customProgressDialog = new CustomProgressDialog(this, "");
+        m_ctrlPhone_Hint.setHint(getButtonName("lab_PhonePro", Constants.CurrentLang));
+        m_ctrlEmail_Hint.setHint(getButtonName("lab_email", Constants.CurrentLang));
+
+        m_ctrlBusinessName_Hint.setHint(getButtonName("lab_PartnerName", Constants.CurrentLang));
+        m_ctrlAddress_Hint.setHint(getButtonName("lab_address", Constants.CurrentLang));
+        m_ctrlZip_Hint.setHint(getButtonName("lab_ZipCode", Constants.CurrentLang));
+        m_ctrlCity_Hint.setHint(getButtonName("lab_city", Constants.CurrentLang));
+        m_ctrlMember_Hint.setHint(getButtonName("lab_CBMember", Constants.CurrentLang));
+        m_ctrlVip_Hint.setHint(getButtonName("lab_CBVIP", Constants.CurrentLang));
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign);
+
+        ControlLink();
+
+        setData();
     }
     public String getButtonName(String strTagName, String strLanguage)
     {
@@ -146,7 +225,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if(isValidEmail(strEmail) == false)
                 {
-                    Toast.makeText(SignActivity.this, "Email is incorrect.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                     m_ctrlEmail.requestFocus();
 
@@ -265,6 +344,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             processing.SendPost(strApi, register);
 
             customProgressDialog.show();
+
+            return;
         }
 
         if(v == m_ctrlCancel)
@@ -288,7 +369,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         if(v == m_ctrlBanner)
         {
-            Intent i = new Intent(SignActivity.this, ViewAdmin.class);
+            Intent i = new Intent(SignActivity.this, MainActivity.class);
             startActivity(i);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             finish();
@@ -308,6 +389,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             {
                 Toast.makeText(SignActivity.this, "Network Error", Toast.LENGTH_LONG).show();
 
+                vibrate(SignActivity.this);
 
                 return;
             }
@@ -315,19 +397,14 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 MyXmlToJSON(strResult);
                 addNewInterpret();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-                customProgressDialog.dismiss();
-            } catch (IOException e) {
-                e.printStackTrace();
-                customProgressDialog.dismiss();
             } catch (JSONException e) {
+                customProgressDialog.dismiss();
                 e.printStackTrace();
             }
         }
     };
 
-    public void addNewInterpret() throws XmlPullParserException, IOException, JSONException {
+    public void addNewInterpret() throws  JSONException {
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
         if(!Constants.ErrorNumber.equals("0"))

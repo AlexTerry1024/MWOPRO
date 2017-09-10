@@ -215,7 +215,7 @@ public class UserVo {
         }
     }
 
-    public UserVo(JSONObject response1) throws IOException, XmlPullParserException, JSONException {
+    public UserVo(JSONObject response1) throws  JSONException {
         if(response1 == null)
             return;
 

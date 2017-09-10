@@ -7,16 +7,19 @@
     android:orientation="vertical"
     >
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+
+        >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#484848"
+            android:layout_height="match_parent"
             android:minHeight="50dp"
+            android:fitsSystemWindows="true"
             >
             <ImageView
                 android:layout_width="match_parent"
@@ -24,8 +27,6 @@
                 android:src="@drawable/logo"
                 android:layout_centerInParent="true"
                 />
-
-
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -36,8 +37,7 @@
                 android:id="@+id/banner_button"
                 />
         </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -71,6 +71,9 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:id="@+id/idMontant"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:textStyle="bold"
                 android:enabled="false"
                 />
             <LinearLayout
@@ -102,6 +105,9 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:id="@+id/idTips"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:enabled="false"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,6 +124,9 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:id="@+id/total"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:enabled="false"
                     />
             </LinearLayout>
             <LinearLayout
@@ -158,6 +167,7 @@
                     android:orientation="horizontal"
                     android:layout_gravity="center_horizontal"
                     android:id="@+id/idItem"
+                    android:layout_marginTop="5dp"
                     >
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -214,12 +224,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginTop="10dp"
                 >
                 <LinearLayout
                     android:layout_width="300dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+
                     >
                     <Button
                         android:layout_width="140dp"
@@ -238,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/idValider"
                         android:textColor="@color/colorWhite"
-                        android:background="@drawable/cancel_button"
+                        android:background="@drawable/valider_button"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -247,7 +259,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/idGroupSendPinCode"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="25dp"
                 >
                 <Button android:layout_width="140dp"
                     android:layout_height="wrap_content"
@@ -255,7 +267,7 @@
                     android:gravity="center"
                     android:id="@+id/idPinCodeCode"
                     android:textColor="@color/colorWhite"
-                    android:background="@drawable/cancel_button"
+                    android:background="@drawable/gift_button"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -263,6 +275,7 @@
                     android:id="@+id/sendPincodeText"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
+                    android:layout_marginTop="10dp"
                     />
             </LinearLayout>
             <LinearLayout

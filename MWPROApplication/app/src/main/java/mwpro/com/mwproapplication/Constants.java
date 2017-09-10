@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -24,12 +25,15 @@ import mwpro.com.mwproapplication.data.UserVo;
 import mwpro.com.mwproapplication.data.XmlToJson;
 
 public class Constants {
+    public static int APPLICATION_SERVER_ID = 1;
+    public static int NET_ERR = 3030;
+    public static int NET_SUC = 1024;
+    public static int CCIndex = 0;
+    public static int currentCoupon = 0;
 
     public static String PHONE_NUMBER = "PHONE_NUMBER";
     public static String PINCODE = "PINCODE";
     public static String EMPTY = "";
-
-    public static int APPLICATION_SERVER_ID = 1;
     public static String Application_Version="4.2.2";
     public static String _APPKEY = "723963818cd42349e0b6157b760166e8c7ce3fddeVArHs8wTOndk79WXjwo61DF";
     public static String OS = "android";
@@ -40,54 +44,59 @@ public class Constants {
     public static String WaitCount = "";
     public static String RecallCount = "";
     public static String Partner_Id = "";
-
     public static String User_Id = "";
-     public static String Partner_PhonePushCode = "";
+    public static String Partner_PhonePushCode = "";
     public static String PUSH_CODE = "";
-
     public static String Partner_Language = "";
     public static String CurrentLang = "FR";
     public static String Current_Country = "FR";
     public static String Application_Token = "cc3d6bbcfa281ed05aba24540f6fb1503de0c952eb";
-    public static ArrayList<MyTitles> myTitle = new ArrayList<MyTitles>();
-    public static float currentMontant = 0;
-
-
-    public static int NET_ERR = 3030;
-    public static int NET_SUC = 1024;
-    public static boolean market_admin = false;
-    public static MarketVo currentMarket = null;
-    public static float AmountCB = 0;
-    public static UserVo currentUser = null;
     public static String viewVipText1 = "";
     public static String viewVipText2 = "";
     public static String GCM_SENDER_ID = "1083433096344";
     public static String CCToken = "";
     public static String CodeError = "";
-    public static float CurrentTotalAmount = 0;
-    public static float CurrentUsedPrice = 0;
     public static String CurrentPercentage = "";
-    public static float CurrentUsedCB = 0;
-    public static float CurrentTag = 0;
-    public static float PaylineRetry = 0;
     public static String paymentError = "";
-    public static int CCIndex = 0;
-    public static boolean ExecutePaymentAfterVip = false;
-    public static boolean IdPayClick = false;
     public static String Percent = "";
-    public static float AmountToPay = 0;
-    public static float AmountUsed = 0;
     public static String User_WalletId = "";
-    public static boolean FirstLogin = true;
-    public static boolean CB = false;
     public static String Email = "";
-    public static Context context = null;
-    public static JSONObject jsonObject = null;
     public static String CodePinText = "";
     public static String codeTel = "";
     public static String codeMarket = "";
-    public static int currentCoupon = 0;
     public static String codePinText = "";
+
+    public static ArrayList<MyTitles> myTitle = new ArrayList<MyTitles>();
+    public static MarketVo currentMarket = null;
+    public static UserVo currentUser = null;
+    public static Context context = null;
+    public static JSONObject jsonObject = null;
+    Vibrator vibrator = null;
+
+    public static float currentMontant = 0;
+    public static float AmountCB = 0;
+    public static float CurrentTotalAmount = 0;
+    public static float CurrentUsedPrice = 0;
+    public static float CurrentUsedCB = 0;
+    public static float CurrentTag = 0;
+    public static float PaylineRetry = 0;
+    public static float AmountToPay = 0;
+    public static float AmountUsed = 0;
+
+    public static boolean ExecutePaymentAfterVip = false;
+    public static boolean IdPayClick = false;
+    public static boolean FirstLogin = true;
+    public static boolean CB = false;
+    public static boolean market_admin = false;
+
+    public static void vibrate(Context con)
+    {
+        if(con == null)
+            return;
+
+        Vibrator vibrator = (Vibrator)con.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
+    }
     public static void MyXmlToJSON(String str) throws JSONException {
         XmlToJson json = new  XmlToJson.Builder(str).build();
 
@@ -149,10 +158,13 @@ public class Constants {
             if(msg.arg2 != Constants.NET_ERR)
             {
                 try {
+                    MyXmlToJSON(str);
                     executePaymentInterpret(str);
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
@@ -164,74 +176,43 @@ public class Constants {
             }
         }
     };
-    public static void executePaymentInterpret(String strData) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
+    public static void executePaymentInterpret(String strData) throws XmlPullParserException, IOException, JSONException {
 
-        xpp.setInput(new StringReader(strData));
-        int eventType = xpp.getEventType();
         String strTagName = "";
-
         String strMessage = "";
         String strProcessToken = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
 
-            if (eventType == XmlPullParser.START_DOCUMENT) {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
-            } else if (eventType == XmlPullParser.START_TAG) {
-                strTagName = xpp.getName();
+        if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
+        {
 
-            } else if (eventType == XmlPullParser.END_TAG) {
+            if (Constants.currentMarket.market_cb == false) {
 
-            } else if (eventType == XmlPullParser.TEXT) {
+                Toast.makeText(context, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                if (strTagName != null && strTagName.equals("ErrorNumber")) {
-                    Constants.ErrorNumber = xpp.getText();
+                Constants.AmountCB = Constants.currentMarket.market_ToPay;
 
+                return;
+            }
+            else {
+                Toast.makeText(context, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                Intent i = new Intent(context, ShowMoneyActivity.class);
 
-                    if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
+                context.startActivity(i);
 
-                    {
-//
-                        if (Constants.currentMarket.market_cb == false) {
+                ((Activity)context).finish();
 
-                            Toast.makeText(context, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                            Constants.AmountCB = Constants.currentMarket.market_ToPay;
-
-                            /*Intent i = new Intent(context, ShowCCActivity.class);
-
-                            startActivity(i);
-
-                            finish();*/
-
-                        }
-                        else {
-                            Toast.makeText(context, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                            Intent i = new Intent(context, ShowMoneyActivity.class);
-
-                            context.startActivity(i);
-
-                            ((Activity)context).finish();
-                        }
-
-                    }
-
-                }
-                if (strTagName != null && strTagName.equals("Message")) {
-                    strMessage = xpp.getText();
-                }
-
-                if (strTagName != null && strTagName.equals("ProcessToken")) {
-                    strProcessToken = xpp.getText();
-                }
+                return;
             }
 
-            eventType = xpp.next();
         }
+
+        strMessage = GetMatchString("Message");
+        strProcessToken = GetMatchString("ProcessToken");
+
+
         if (Constants.ErrorNumber.equals("0")) {
             Constants.ProcessToken = strProcessToken;
             Toast.makeText(context, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -244,6 +225,8 @@ public class Constants {
             context.startActivity(i);
 
             ((Activity)context).finish();
+
+            return;
         }
         else if (Constants.ErrorNumber.equals("250"))   // test si erreur Payline - code Payline dans Message
         {

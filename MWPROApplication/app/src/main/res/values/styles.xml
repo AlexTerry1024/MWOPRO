@@ -1,13 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="background">@color/colorWhite</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
     <style name="SwitchButtonStyle">
         <item name="android:paddingLeft">10dp</item>
@@ -15,6 +15,10 @@
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
 
+    </style>
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/valider_btn_nomal</item>
+        <item name="colorControlActivated">@color/gift_btn_focus</item>
     </style>
     <style name="ACPLDialog">
         <item name="android:windowFrame">@null</item>

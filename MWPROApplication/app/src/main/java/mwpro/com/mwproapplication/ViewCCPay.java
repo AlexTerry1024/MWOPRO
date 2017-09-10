@@ -34,14 +34,19 @@ import java.util.ArrayList;
 
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import mwpro.com.mwproapplication.data.MyTitles;
+import mwpro.com.mwproapplication.ui.CustomProgressDialog;
+import mwpro.com.mwproapplication.ui.MySimpleTableDataAdapter;
+import mwpro.com.mwproapplication.ui.MySimpleTableHeaderAdapter;
+import mwpro.com.mwproapplication.ui.MyTableView;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.formatNumber;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
-public class ViewCCPay extends AppCompatActivity implements View.OnClickListener{
+public class ViewCCPay extends Activity implements View.OnClickListener{
 
     ImageView m_ctrlBannerButton;
 
@@ -81,7 +86,18 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
         textTitle = (TextView)findViewById(R.id.title);
 
         textTitle.setText(Constants.viewVipText1);
+        m_ctrlBannerButton = (ImageView)findViewById(R.id.banner_button);
 
+        m_ctrlBannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ViewCCPay.this, MainActivity.class);
+
+                startActivity(i);
+
+                ViewCCPay.this.finish();
+            }
+        });
         lab_amount = (TextView)findViewById(R.id.lab_amount);
 
         lab_amount.setText(getButtonName("lab_amount", Constants.CurrentLang));
@@ -530,6 +546,8 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
         {
             Toast.makeText(ViewCCPay.this, "CodePin du Client !!", Toast.LENGTH_LONG).show();
 
+            vibrate(ViewCCPay.this);
+
             idPinCode.setEnabled(true);
 
             Constants.CodePinText = "";
@@ -698,10 +716,11 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
             if(msg.arg2 != Constants.NET_ERR)
             {
                 try {
+                    MyXmlToJSON(str);
+
                     executePaymentInterpret(str);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
@@ -718,73 +737,47 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
             }
         }
     };
-    public void executePaymentInterpret(String strData) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
+    public void executePaymentInterpret(String strData) throws JSONException {
 
-        xpp.setInput(new StringReader(strData));
-        int eventType = xpp.getEventType();
         String strTagName = "";
-
         String strMessage = "";
         String strProcessToken = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
 
-            if (eventType == XmlPullParser.START_DOCUMENT) {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
-            } else if (eventType == XmlPullParser.START_TAG) {
-                strTagName = xpp.getName();
+        if (Constants.ErrorNumber.equals("200"))
+        {
+            if (Constants.currentMarket.market_cb == false) {
 
-            } else if (eventType == XmlPullParser.END_TAG) {
+                Toast.makeText(ViewCCPay.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-            } else if (eventType == XmlPullParser.TEXT) {
+                Constants.AmountCB = Constants.currentMarket.market_ToPay;
 
-                if (strTagName != null && strTagName.equals("ErrorNumber")) {
-                    Constants.ErrorNumber = xpp.getText();
+                Intent i = new Intent(ViewCCPay.this, ViewCreditCard.class);
 
-                    if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
-                    {
-//
-                        if (Constants.currentMarket.market_cb == false) {
+                startActivity(i);
 
-                            Toast.makeText(ViewCCPay.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+                finish();
 
-                            Constants.AmountCB = Constants.currentMarket.market_ToPay;
+                return;
 
-                            Intent i = new Intent(ViewCCPay.this, ViewCreditCard.class);
-
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-
-                        }
-                        else {
-                            Toast.makeText(ViewCCPay.this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                            Intent i = new Intent(ViewCCPay.this, ShowMoneyActivity.class);
-
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-                        }
-                    }
-                }
-                if (strTagName != null && strTagName.equals("Message")) {
-                    strMessage = xpp.getText();
-                }
-
-                if (strTagName != null && strTagName.equals("ProcessToken")) {
-                    strProcessToken = xpp.getText();
-                }
             }
+            else {
+                Toast.makeText(ViewCCPay.this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-            eventType = xpp.next();
+                Intent i = new Intent(ViewCCPay.this, ShowMoneyActivity.class);
+
+                startActivity(i);
+
+                finish();
+
+                return;
+            }
         }
+        strMessage = GetMatchString("Message");
+        strProcessToken = GetMatchString("ProcessToken");
+
+
         if (Constants.ErrorNumber.equals("0")) {
             Constants.ProcessToken = strProcessToken;
             Toast.makeText(ViewCCPay.this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -858,10 +851,11 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
                 try {
                     Toast.makeText(ViewCCPay.this, getButtonName("lab_PayOk", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                    MyXmlToJSON(strObj);
+
                     interpretPayCC(strObj);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
@@ -878,37 +872,15 @@ public class ViewCCPay extends AppCompatActivity implements View.OnClickListener
         }
     };
 
-    public void interpretPayCC(String strXml) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
+    public void interpretPayCC(String strXml) throws JSONException {
 
-        xpp.setInput(new StringReader(strXml));
-        int eventType = xpp.getEventType();
         String strTagName = "";
 
         String strMessage = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
 
-            if (eventType == XmlPullParser.START_DOCUMENT) {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
+        strMessage = GetMatchString("Message");
 
-            } else if (eventType == XmlPullParser.START_TAG) {
-                strTagName = xpp.getName();
-
-            } else if (eventType == XmlPullParser.END_TAG) {
-
-            } else if (eventType == XmlPullParser.TEXT) {
-
-                if (strTagName != null && strTagName.equals("ErrorNumber")) {
-                    Constants.ErrorNumber = xpp.getText();
-                }
-                if (strTagName != null && strTagName.equals("Message")) {
-                    strMessage = xpp.getText();
-                }
-            }
-
-            eventType = xpp.next();
-        }
 
         if(Constants.ErrorNumber.equals("0"))
         {

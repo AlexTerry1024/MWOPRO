@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -40,52 +41,57 @@ import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.context;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 
-public class VIPActivity extends AppCompatActivity {
+public class VIPActivity extends Activity {
 
     ImageView m_ctrlBannerButton = null;
     TextView m_ctrlTitle = null;
     TextView m_ctrlSecondTitle = null;
+    TextView    m_ctrlVip_Helper = null;
+    TextView    m_ctrlMember_Helper = null;
+    TextView    m_ctrlMarks = null;
     TextView m_ctrlThirdTitle = null;
+
     EditText m_ctrlPhone = null;
-    TextView m_ctrlNfcCard_Help = null;
     EditText m_ctrlNfcCard = null;
-    TextView m_ctrlPreNom_Help = null;
     EditText m_ctrlPrenom = null;
-    TextView m_ctrlNom_Help = null;
     EditText m_ctrlNom = null;
-    TextView m_ctrlEmail_Help = null;
     EditText m_ctrlEmail = null;
+
+    TextInputLayout m_ctrlPhone_Hint = null;
+    TextInputLayout m_ctrlNfc_Hint = null;
+    TextInputLayout m_ctrlFirstName_Hint = null;
+    TextInputLayout m_ctrlLastName_Hint = null;
+    TextInputLayout m_ctrlEmail_Hint = null;
     RadioButton m_ctrlMember = null;
     RadioButton m_ctrlVip = null;
     DiscreteSeekBar m_ctrlVipVal = null;
     Button      m_ctrlCancel = null;
     Button      m_ctrlApply = null;
-    TextView    m_ctrlVip_Helper = null;
-    TextView    m_ctrlMember_Helper = null;
-    TextView    m_ctrlMarks = null;
+
     int         _couponIndex = 0;
     int         n_TransactionAmount = 0;
     CustomProgressDialog customProgressDialog = null;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vip);
 
+    public void ControlLink()
+    {
         m_ctrlBannerButton = (ImageView)findViewById(R.id.banner_button);
         m_ctrlTitle = (TextView)findViewById(R.id.title);
         m_ctrlSecondTitle = (TextView)findViewById(R.id.second_title);
         m_ctrlThirdTitle = (TextView)findViewById(R.id.third_title);
         m_ctrlPhone = (EditText)findViewById(R.id.phone);
-        m_ctrlNfcCard_Help = (TextView)findViewById(R.id.phone_help);
+
+        m_ctrlPhone_Hint = (TextInputLayout)findViewById(R.id.phone_title);
+        m_ctrlNfc_Hint = (TextInputLayout)findViewById(R.id.nfccard_title);
+        m_ctrlFirstName_Hint = (TextInputLayout)findViewById(R.id.firstname_title);
+        m_ctrlLastName_Hint = (TextInputLayout)findViewById(R.id.lastname_title);
+        m_ctrlEmail_Hint = (TextInputLayout)findViewById(R.id.email_title);
         m_ctrlNfcCard = (EditText)findViewById(R.id.nfccard);
-        m_ctrlPreNom_Help = (TextView)findViewById(R.id.prenom_help);
         m_ctrlPrenom = (EditText) findViewById(R.id.prenom);
-        m_ctrlNom_Help = (TextView)findViewById(R.id.nom_help);
         m_ctrlNom = (EditText)findViewById(R.id.nom);
         m_ctrlEmail = (EditText)findViewById(R.id.email);
-        m_ctrlEmail_Help = (TextView)findViewById(R.id.email_help);
         m_ctrlMember = (RadioButton)findViewById(R.id.member);
         m_ctrlVip = (RadioButton)findViewById(R.id.vip);
         m_ctrlVipVal = (DiscreteSeekBar) findViewById(R.id.vip_value);
@@ -94,89 +100,8 @@ public class VIPActivity extends AppCompatActivity {
         m_ctrlVip_Helper = (TextView)findViewById(R.id.vip_help);
         m_ctrlMember_Helper = (TextView)findViewById(R.id.member_help);
         m_ctrlMarks = (TextView)findViewById(R.id.marks);
-        m_ctrlTitle.setText(Constants.viewVipText1);
-        m_ctrlSecondTitle.setText(Constants.viewVipText2);
-        m_ctrlThirdTitle.setText(getButtonName("lab_tel", Constants.CurrentLang) + "  " + getButtonName("lab_obligatoire", Constants.CurrentLang));
-
-        m_ctrlPhone.setText(Constants.currentUser.user_phone);
-        m_ctrlPrenom.setText(Constants.currentUser.user_name);
-        m_ctrlNom.setText(Constants.currentUser.user_lastname);
-        m_ctrlEmail.setText(Constants.currentUser.user_email);
-
-        m_ctrlPhone.setSelection(m_ctrlPhone.getText().toString().length());
-        m_ctrlPrenom.setSelection(m_ctrlPrenom.getText().toString().length());
-        m_ctrlNom.setSelection(m_ctrlNom.getText().toString().length());
-        m_ctrlEmail.setSelection(m_ctrlEmail.getText().toString().length());
-
-        m_ctrlNfcCard_Help.setText(getButtonName("lab_idNFC", Constants.CurrentLang));
-        m_ctrlPreNom_Help.setText(getButtonName("lab_prenom", Constants.CurrentLang));
-        m_ctrlNom_Help.setText(getButtonName("lab_nom", Constants.CurrentLang));
-        m_ctrlEmail_Help.setText(getButtonName("lab_email", Constants.CurrentLang));
-        m_ctrlVip_Helper.setText(getButtonName("lab_vip", Constants.CurrentLang));
-        m_ctrlMember_Helper.setText(getButtonName("lab_membre", Constants.CurrentLang));
-        m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
-        m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
-
-        Intent i = getIntent();
-
-        String strCoupon = i.getStringExtra("CouponNumber");
-
-        if(strCoupon != null)
-        {
-            _couponIndex = Integer.parseInt(strCoupon);
-        }
-
         customProgressDialog = new CustomProgressDialog(this, "");
 
-        m_ctrlVipVal.setEnabled(false);
-        m_ctrlVipVal.setVisibility(View.GONE);
-
-        m_ctrlVipVal.setMin(Constants.currentMarket.market_member_value);
-        m_ctrlVipVal.setProgress(Constants.currentMarket.market_member_value);
-        Constants.currentUser.User_AccessKey = "";
-
-        if(Constants.currentMarket.Partner_AllowChangeUserType)
-        {
-            m_ctrlMember.setChecked(true);
-
-            m_ctrlVip.setChecked(false);
-        }else
-        {
-            findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
-
-            m_ctrlVipVal.setVisibility(View.INVISIBLE);
-        }
-
-        if(Constants.currentMarket.market_vip_value == 0)
-        {
-            findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
-
-            m_ctrlVipVal.setVisibility(View.INVISIBLE);
-        }
-
-        m_ctrlApply.setEnabled(canValidate());
-
-        if(Constants.ExecutePaymentAfterVip == true)
-        {
-            if(Constants.currentMarket.market_vip_value == 0)
-            {
-                findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
-
-                m_ctrlVipVal.setVisibility(View.INVISIBLE);
-            }
-        }
-
-        m_ctrlMarks.setText(m_ctrlVipVal.getProgress() + "%");
-
-        if (Constants.currentMarket.market_activity == 2606) {  // test si Mairie ... pas de VIP)
-
-            Constants.currentMarket.Partner_AllowChangeUserType = false;
-
-            m_ctrlVipVal.setMin(0);
-
-            m_ctrlVip.setChecked(true);
-            m_ctrlMember.setChecked(false);
-        }
         m_ctrlCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +116,16 @@ public class VIPActivity extends AppCompatActivity {
             }
         });
 
+        m_ctrlBannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(VIPActivity.this, MainActivity.class);
+
+                startActivity(i);
+
+                finish();
+            }
+        });
         m_ctrlApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -324,6 +259,95 @@ public class VIPActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void setData()
+    {
+        m_ctrlTitle.setText(Constants.viewVipText1);
+        m_ctrlSecondTitle.setText(Constants.viewVipText2);
+        m_ctrlThirdTitle.setText(getButtonName("lab_tel", Constants.CurrentLang) + "  " + getButtonName("lab_obligatoire", Constants.CurrentLang));
+
+        m_ctrlPhone.setText(Constants.currentUser.user_phone);
+        m_ctrlPrenom.setText(Constants.currentUser.user_name);
+        m_ctrlNom.setText(Constants.currentUser.user_lastname);
+        m_ctrlEmail.setText(Constants.currentUser.user_email);
+        m_ctrlPhone.setSelection(m_ctrlPhone.getText().toString().length());
+        m_ctrlPrenom.setSelection(m_ctrlPrenom.getText().toString().length());
+        m_ctrlNom.setSelection(m_ctrlNom.getText().toString().length());
+        m_ctrlEmail.setSelection(m_ctrlEmail.getText().toString().length());
+        m_ctrlPhone_Hint.setHint(getButtonName("lab_Phone", Constants.CurrentLang));
+        m_ctrlNfc_Hint.setHint(getButtonName("lab_idNFC", Constants.CurrentLang));
+        m_ctrlFirstName_Hint.setHint(getButtonName("lab_prenom", Constants.CurrentLang));
+        m_ctrlLastName_Hint.setHint(getButtonName("lab_nom", Constants.CurrentLang));
+        m_ctrlEmail_Hint.setHint(getButtonName("lab_email", Constants.CurrentLang));
+        m_ctrlVip_Helper.setText(getButtonName("lab_vip", Constants.CurrentLang));
+        m_ctrlMember_Helper.setText(getButtonName("lab_membre", Constants.CurrentLang));
+        m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
+        m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vip);
+
+        ControlLink();
+
+        setData();
+
+        Intent i = getIntent();
+
+        String strCoupon = i.getStringExtra("CouponNumber");
+
+        if(strCoupon != null)
+        {
+            _couponIndex = Integer.parseInt(strCoupon);
+        }
+
+        m_ctrlVipVal.setEnabled(false);
+        m_ctrlVipVal.setVisibility(View.GONE);
+        m_ctrlVipVal.setMin(Constants.currentMarket.market_member_value);
+        m_ctrlVipVal.setProgress(Constants.currentMarket.market_member_value);
+
+        Constants.currentUser.User_AccessKey = "";
+
+        if(Constants.currentMarket.Partner_AllowChangeUserType)
+        {
+            m_ctrlMember.setChecked(true);
+            m_ctrlVip.setChecked(false);
+        }else
+        {
+            findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
+            m_ctrlVipVal.setVisibility(View.INVISIBLE);
+        }
+
+        if(Constants.currentMarket.market_vip_value == 0)
+        {
+            findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
+            m_ctrlVipVal.setVisibility(View.INVISIBLE);
+        }
+
+        m_ctrlApply.setEnabled(canValidate());
+
+        if(Constants.ExecutePaymentAfterVip == true)
+        {
+            if(Constants.currentMarket.market_vip_value == 0)
+            {
+                findViewById(R.id.radio_group).setVisibility(View.INVISIBLE);
+                m_ctrlVipVal.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        m_ctrlMarks.setText(m_ctrlVipVal.getProgress() + "%");
+
+        if (Constants.currentMarket.market_activity == 2606) {  // test si Mairie ... pas de VIP)
+
+            Constants.currentMarket.Partner_AllowChangeUserType = false;
+
+            m_ctrlVipVal.setMin(0);
+            m_ctrlVip.setChecked(true);
+            m_ctrlMember.setChecked(false);
+        }
+
+    }
     public boolean isValidEmail(String email)
     {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -415,7 +439,6 @@ public class VIPActivity extends AppCompatActivity {
             if (msg.arg2 != Constants.NET_ERR) {
                 try {
                     MyXmlToJSON(str);
-
                     InterpretUserSetAndParse();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -425,7 +448,14 @@ public class VIPActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
+                vibrate(VIPActivity.this);
                 Toast.makeText(VIPActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
+
+                startActivity(i);
+
+                finish();
 
                 return;
             }
@@ -464,6 +494,7 @@ public class VIPActivity extends AppCompatActivity {
         } else if (Constants.ErrorNumber.equals("30")) {
             Toast.makeText(VIPActivity.this, getButtonName("lab_UserPhoneExist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(VIPActivity.this);
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -473,23 +504,19 @@ public class VIPActivity extends AppCompatActivity {
         } else if (Constants.ErrorNumber.equals("31")) {
             Toast.makeText(VIPActivity.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(VIPActivity.this);
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
-
             startActivity(i);
-
             finish();
             return;
         } else if (Constants.ErrorNumber.equals("241")) {
-            //   erreurHome = _controller.res.g('pEvt.result.ErrorMessage');
-
+            vibrate(VIPActivity.this);
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
-
             startActivity(i);
-
             finish();
             return;
         } else if (Constants.ErrorNumber.equals("243")) {
-            //    erreurHome = _controller.res.g('lab_UserPhoneExistAsPartner');
+            vibrate(VIPActivity.this);
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -564,10 +591,10 @@ public class VIPActivity extends AppCompatActivity {
             if(msg.arg2 != Constants.NET_ERR)
             {
                 try {
-                    executePaymentInterpret(str);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                    MyXmlToJSON(str);
+                    executePaymentInterpret();
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
@@ -575,81 +602,54 @@ public class VIPActivity extends AppCompatActivity {
                 Toast.makeText(VIPActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(VIPActivity.this, ViewStatusActivity.class);
+
                 startActivity(i);
+
+                finish();
             }
         }
     };
-    public void executePaymentInterpret(String strData) throws XmlPullParserException, IOException {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
+    public void executePaymentInterpret() throws JSONException {
 
-        xpp.setInput(new StringReader(strData));
-        int eventType = xpp.getEventType();
         String strTagName = "";
-
         String strMessage = "";
         String strProcessToken = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
 
-            if (eventType == XmlPullParser.START_DOCUMENT) {
+        Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
-            } else if (eventType == XmlPullParser.START_TAG) {
-                strTagName = xpp.getName();
+        if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
+        {
+            if (Constants.currentMarket.market_cb == false) {
 
-            } else if (eventType == XmlPullParser.END_TAG) {
+                Toast.makeText(this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-            } else if (eventType == XmlPullParser.TEXT) {
+                Constants.AmountCB = Constants.currentMarket.market_ToPay;
 
-                if (strTagName != null && strTagName.equals("ErrorNumber")) {
-                    Constants.ErrorNumber = xpp.getText();
+                Intent i = new Intent(context, ViewCreditCard.class);
 
+                startActivity(i);
 
+                finish();
 
-                    if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
+                return;
+            }
+            else {
+                Toast.makeText(this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                    {
-//
-                        if (Constants.currentMarket.market_cb == false) {
+                Intent i = new Intent(this, ShowMoneyActivity.class);
 
-                            Toast.makeText(this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+                startActivity(i);
 
-                            Constants.AmountCB = Constants.currentMarket.market_ToPay;
+                finish();
 
-                            Intent i = new Intent(context, ViewCreditCard.class);
-
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-                        }
-                        else {
-                            Toast.makeText(this, getButtonName("lab_depositError", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                            Intent i = new Intent(this, ShowMoneyActivity.class);
-
-                            startActivity(i);
-
-                            finish();
-
-                            return;
-                        }
-
-                    }
-
-                }
-                if (strTagName != null && strTagName.equals("Message")) {
-                    strMessage = xpp.getText();
-                }
-
-                if (strTagName != null && strTagName.equals("ProcessToken")) {
-                    strProcessToken = xpp.getText();
-                }
+                return;
             }
 
-            eventType = xpp.next();
         }
+
+        strMessage = GetMatchString("Message");
+        strProcessToken = GetMatchString("ProcessToken");
+
         if (Constants.ErrorNumber.equals("0")) {
             Constants.ProcessToken = strProcessToken;
             Toast.makeText(this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();

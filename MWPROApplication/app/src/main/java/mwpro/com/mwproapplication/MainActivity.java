@@ -13,16 +13,16 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.kyleduo.switchbutton.SwitchButton;
 import org.json.JSONArray;
@@ -33,12 +33,14 @@ import java.io.IOException;
 import mwpro.com.mwproapplication.data.Card;
 import mwpro.com.mwproapplication.data.MarketVo;
 import mwpro.com.mwproapplication.data.MyTitles;
+import mwpro.com.mwproapplication.ui.CustomAdapter;
 import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.codeMarket;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
@@ -50,8 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     Button m_ctrlBtnPincode = null;
     Button m_ctrlBtnActivate = null;
 
-    TextView m_ctrlLabelTelePhone = null;
-    TextView m_ctrlLabelPinCode = null;
+
     SwitchButton m_ctrlBtnLanguage = null;
     SharedPreferences preferences = null;
     ImageView m_ctrlBannerButton = null;
@@ -69,11 +70,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public int nLTelePhone = -1;
     public int nLPincode = -1;
     CustomProgressDialog dialog = null;
-
+    Spinner m_ctrlSelLang = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         dialog = new CustomProgressDialog(MainActivity.this, "");
         m_ctrlPhone_number = (EditText)findViewById(R.id.phone_number);
@@ -84,8 +86,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
         m_ctrlBtnActivate = (Button)findViewById(R.id.btn_activate);
         m_ctrlBtnLanguage = (SwitchButton)findViewById(R.id.sb_text_state);
         m_ctrlBannerButton = (ImageView)findViewById(R.id.banner_button);
-        m_ctrlLabelTelePhone = (TextView)findViewById(R.id.mark_phone_number);
-        m_ctrlLabelPinCode = (TextView)findViewById(R.id.mark_pincode_number);
+
+
+        TextInputLayout layout = (TextInputLayout)findViewById(R.id.phone_number_help);
+        TextInputLayout pin_layout = (TextInputLayout)findViewById(R.id.phone_pin_help);
+        layout.setHint(getButtonName(LTELEPHONE, Constants.CurrentLang));
+        pin_layout.setHint(getButtonName(LPINCODE, Constants.CurrentLang));
 
         preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String strPhoneNumber = Constants.codeTel;
@@ -100,6 +106,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
         Constants.codeMarket = preferences.getString(Constants.PINCODE, "");
         Constants.codeTel = preferences.getString(Constants.PHONE_NUMBER, "");
 
+        m_ctrlSelLang = (Spinner) findViewById(R.id.spinner);
+        //spin.setOnItemSelectedListener(this);
+        String[] countryNames={"France","English"};
+        int flags[] = {R.drawable.france, R.drawable.america};
+        CustomAdapter customAdapter=new CustomAdapter(getApplicationContext(),flags,countryNames);
+
+        m_ctrlSelLang.setAdapter(customAdapter);
+
         if(strPhoneNumber.equals(Constants.EMPTY) || strPincode.equals(Constants.EMPTY))
         {
             m_ctrlBtnLogin.setEnabled(false);
@@ -109,18 +123,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
 
         initUI();
-
-        /*m_ctrlPhone_number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                String str = m_ctrlPhone_number.getText().toString();
-                m_ctrlPhone_number.extendSelection(str.length());
-
-
-
-            }
-        });*/
 
         m_ctrlPhone_number.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -173,8 +175,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         m_ctrlBtnPincode.setText(getButtonName(PINCODETITLE, Constants.CurrentLang));
         m_ctrlBtnActivate.setText(getButtonName(ACTIVATE, Constants.CurrentLang));
-        m_ctrlLabelTelePhone.setText(getButtonName(LTELEPHONE, Constants.CurrentLang));
-        m_ctrlLabelPinCode.setText(getButtonName(LPINCODE, Constants.CurrentLang));
 
         if(Constants.FirstLogin == false)
             m_ctrlBtnActivate.setEnabled(true);
@@ -224,11 +224,43 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         initButtonUI();
 
+        m_ctrlSelLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0)
+                {
+                    Constants.CurrentLang = "FR";
+                    Constants.Current_Country = "FR";
+                }else
+                {
+                    Constants.CurrentLang = "US";
+                    Constants.Current_Country = "US";
+                }
 
-        if(Constants.CurrentLang.equals("FR"))
+                if(!m_ctrlPhone_number.getText().toString().equals("") && !m_ctrlPincode.getText().toString().equals(""))
+                {
+                    SaveFile(m_ctrlPincode.getText().toString(), m_ctrlPhone_number.getText().toString(), Build.VERSION.RELEASE, Constants.Current_Country, Constants.CurrentLang);
+                }
+                initButtonUI();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        if(Constants.CurrentLang.equals("FR")) {
             m_ctrlBtnLanguage.setChecked(false);
-        else
+
+            m_ctrlSelLang.setSelection(0);
+        }else
+        {
             m_ctrlBtnLanguage.setChecked(true);
+            m_ctrlSelLang.setSelection(1);
+        }
+
         m_ctrlPhone_number.setText(Constants.codeTel);
         m_ctrlPincode.setText(Constants.codeMarket);
 
@@ -323,6 +355,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         Intent i = new Intent(MainActivity.this, ViewAdmin.class);
 
         startActivity(i);
+
+        finish();
     }
     public void Login()
     {
@@ -374,11 +408,16 @@ public class MainActivity extends Activity implements View.OnClickListener{
         public void handleMessage(Message msg) {
             String str = (String)msg.obj;
 
-            dialog.dismiss();
+
 
             if(msg.arg2 == Constants.NET_ERR)
             {
-                Toast.makeText(MainActivity.this, "Network is busing", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(MainActivity.this);
+
+                dialog.dismiss();
+
                 return;
             }
 
@@ -389,10 +428,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 MyXmlToJSON(str);
 
                 PartnerLoginInfo();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -413,20 +449,21 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         return strApi;
     }
-    public void PartnerLoginInfo() throws XmlPullParserException, IOException, JSONException {
+    public void PartnerLoginInfo() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
         if(Constants.ErrorNumber.equals("11"))
         {
             Toast.makeText(MainActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            dialog.dismiss();
             return;
         }else
         {
             if(!Constants.ErrorNumber.equals("0")) {
-
+                dialog.dismiss();
                 Toast.makeText(MainActivity.this, getButtonName("lab_ErrorLogin", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+                vibrate(MainActivity.this);
 
                 return;
             }else
@@ -438,23 +475,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         Constants.ProcessToken = GetMatchString("ProcessToken");
         Constants.currentMarket.Partner_PhoneNumber = GetMatchString("Partner_PhoneNumber");
+
         int nResult = CompareVersion(Constants.currentMarket.market_Version, Constants.Application_Version);
+        if(nResult == 2)
+        {
+            vibrate(MainActivity.this);
+
+            Toast.makeText(MainActivity.this, getButtonName("lab_PayCancel", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+            return;
+        }
+
+
         Constants.Current_Country = GetMatchString("Partner_PhoneCountry");
         Constants.currentMarket.market_code = Constants.codeMarket;
         Constants.market_admin = Constants.currentMarket.Partner_AllowManagement;
         Constants.currentMarket.market_country = GetMatchString("Partner_PhoneCountry");
-        if(nResult == 2)
-        {
-            return;
-        }
+
         SaveFile(codeMarket, Constants.codeTel, Build.VERSION.RELEASE, Constants.Current_Country, Constants.CurrentLang);
 
-        dialog.show();
+        //dialog.show();
 
         MyDBProcessing processing = new MyDBProcessing();
         processing.SendPost(CreditCardJSON(), CreditCardLogin);
     }
-    public void CreditCardInfo() throws XmlPullParserException, IOException, JSONException {
+    public void CreditCardInfo() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -660,7 +705,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
             return;
         }else
         {
-            //goto Show Money
             Intent i = new Intent(MainActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -682,10 +726,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 MyXmlToJSON(str);
 
                 CreditCardInfo();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -739,6 +779,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
             if(msg.arg2 == Constants.NET_ERR)
             {
                 Toast.makeText(MainActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(MainActivity.this);
 
                 return;
             }else

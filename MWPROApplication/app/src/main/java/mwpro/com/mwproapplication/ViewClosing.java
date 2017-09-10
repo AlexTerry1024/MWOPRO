@@ -150,17 +150,14 @@ public class ViewClosing extends Fragment {
             try {
                 MyXmlToJSON(str);
                 interpretList(str);
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    public void interpretList(String str) throws XmlPullParserException, IOException, JSONException {
+    public void interpretList(String str) throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 

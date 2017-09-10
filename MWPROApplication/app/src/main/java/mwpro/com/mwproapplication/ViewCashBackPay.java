@@ -1,9 +1,11 @@
 package mwpro.com.mwproapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,17 +33,17 @@ import static mwpro.com.mwproapplication.Constants.formatNumber;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
 
 
-public class ViewCashBackPay extends AppCompatActivity implements View.OnClickListener{
+public class ViewCashBackPay extends Activity implements View.OnClickListener{
 
     TextView m_ctrlTitle = null;
     TextView m_ctrlIDMontant_Help = null;
     EditText m_ctrlIDMontant = null;
     TextView m_ctrlLabelTipsortotal = null;
-    TextView m_ctrlTipsLabel = null;
+    TextInputLayout m_ctrlTipsLabel = null;
     EditText m_ctrlIDTips = null;
-    TextView m_ctrlLabCCPayTotal = null;
+    TextInputLayout m_ctrlLabCCPayTotal = null;
     EditText m_ctrlTotal = null;
-    TextView m_ctrlEnterPinCode = null;
+    TextInputLayout m_ctrlEnterPinCode = null;
     EditText m_ctrlCodePin = null;
     TextView m_ctrlLab_Number = null;
     Button m_ctrlIDCancel = null;
@@ -65,20 +67,15 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
         m_ctrlIDMontant.setEnabled(false);
         m_ctrlLabelTipsortotal = (TextView)findViewById(R.id.labeltipsortotal);
         m_ctrlLabelTipsortotal.setText(getButtonName("lab_tipsOrtotal", Constants.CurrentLang));
-        m_ctrlTipsLabel = (TextView)findViewById(R.id.tipsLabel);
+        m_ctrlTipsLabel = (TextInputLayout)findViewById(R.id.tipsLabel);
         m_ctrlIDTips = (EditText)findViewById(R.id.idTips);
-        m_ctrlLabCCPayTotal = (TextView)findViewById(R.id.ccpayTotal);
-        m_ctrlLabCCPayTotal.setText(getButtonName("lab_CCpayTotal", Constants.CurrentLang));
+        m_ctrlLabCCPayTotal = (TextInputLayout)findViewById(R.id.ccpayTotal);
+        m_ctrlLabCCPayTotal.setHint(getButtonName("lab_CCpayTotal", Constants.CurrentLang));
         m_ctrlTotal = (EditText)findViewById(R.id.total);
 
         m_ctrlBanner = (ImageView)findViewById(R.id.banner_button);
-
-
-        //m_ctrlTotal.set
-
-
-        m_ctrlEnterPinCode = (TextView)findViewById(R.id.codePin_Help);
-        m_ctrlEnterPinCode.setText(getButtonName("lab_enterCodePin", Constants.CurrentLang));
+        m_ctrlEnterPinCode = (TextInputLayout)findViewById(R.id.codePin_Help);
+        m_ctrlEnterPinCode.setHint(getButtonName("lab_enterCodePin", Constants.CurrentLang));
         m_ctrlCodePin = (EditText)findViewById(R.id.codePin);
         m_ctrlLab_Number = (TextView)findViewById(R.id.lab_number);
         m_ctrlLab_Number.setText(getButtonName("lab_6numbers", Constants.CurrentLang));
@@ -98,7 +95,7 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
 
         m_ctrlIDMontant.setText(formatNumber("" + Constants.currentMontant, 2, true, false));
 
-        m_ctrlTipsLabel.setText(getButtonName("lab_tips", Constants.CurrentLang) + " : " + formatNumber( "" + Constants.currentMontant * 0.15, 2, true, false) + " ?");
+        m_ctrlTipsLabel.setHint(getButtonName("lab_tips", Constants.CurrentLang) + " : " + formatNumber( "" + Constants.currentMontant * 0.15, 2, true, false) + " ?");
 
         m_ctrlTotal.addTextChangedListener(new TextWatcher() {
             @Override
@@ -148,9 +145,83 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
 
     public void onClickSend()
     {
-        Toast.makeText(ViewCashBackPay.this, getButtonName("lab_processTransac", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+        String strApi = "{Api: 'UserPinCodeGet',";
+
+        strApi += "User_PhoneCountry:'" + Constants.currentUser.User_PhoneCountry + "',";
+        strApi += "User_PhoneNumber:'" + Constants.currentUser.user_phone + "',";
+        strApi += "ProcessToken:'" + Constants.ProcessToken + "',";
+        strApi += "Application_Token:'" + Constants.Application_Token + "',";
+        strApi += "Application_ServerId:'" + Constants.APPLICATION_SERVER_ID + "',";
+        strApi += "Application_Version:'" + Constants.Application_Version + "'}";
+
+        customProgressDialog.show();
+        customProgressDialog.setCancelable(false);
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        MyDBProcessing processing = MyDBProcessing.getInstance();
+
+        processing.SendPost(strApi, sendPincode);
     }
 
+    Handler sendPincode = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg){
+
+            customProgressDialog.dismiss();
+
+            String str = (String) msg.obj;
+
+            if(msg.arg2 == Constants.NET_ERR)
+            {
+                Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                return;
+            }
+
+            try {
+                MyXmlToJSON(str);
+
+                Constants.ErrorNumber = GetMatchString("ErrorNumber");
+
+                if(Constants.ErrorNumber.equals("20"))
+                {
+                    Toast.makeText(ViewCashBackPay.this, getButtonName("lab_PincodeUnlnownUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+
+                if(Constants.ErrorNumber.equals("23"))
+                {
+                    Toast.makeText(ViewCashBackPay.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+                if(Constants.ErrorNumber.equals("0"))
+                {
+                    Constants.ProcessToken = GetMatchString("ProcessToken");
+                    Toast.makeText(ViewCashBackPay.this, getButtonName("lab_PinCodeSent", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    m_ctrlIDPinCodeSend.setEnabled(false);
+
+                    return;
+                }else
+                {
+                    Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    };
     Handler SendHandler = new Handler()
     {
         @Override
@@ -255,10 +326,6 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
             try {
                 MyXmlToJSON(str);
                 interpretValidData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -266,7 +333,7 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
         }
     };
 
-    public void interpretValidData() throws IOException, XmlPullParserException, JSONException {
+    public void interpretValidData() throws JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -300,6 +367,8 @@ public class ViewCashBackPay extends AppCompatActivity implements View.OnClickLi
 
                 return;
             }
+
+            return;
         }
 
         if(Constants.ErrorNumber.equals("0"))

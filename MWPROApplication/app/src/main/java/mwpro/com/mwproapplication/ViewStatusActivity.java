@@ -10,33 +10,32 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.pepperonas.materialdialog.MaterialDialog;
-
+import android.widget.Spinner;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Calendar;
 import java.util.Date;
 
 import mwpro.com.mwproapplication.data.Card;
 import mwpro.com.mwproapplication.data.MyTitles;
+import mwpro.com.mwproapplication.ui.CustomOnOffAdapter;
 import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
@@ -66,10 +65,10 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
     EditText m_ctrlIDExtra = null;
     TextView m_ctrlIDExtra_Help = null;
     TextView m_ctrlIDLabelBottom = null;
-    SwitchButton m_ctrlCheck = null;
-    TextView m_ctrlCheck_Help = null;
-    SwitchButton m_ctrlCheck_1 = null;
-    TextView m_ctrlCheck_1_Help = null;
+    CheckBox m_ctrlCheck = null;
+
+    CheckBox m_ctrlCheck_1 = null;
+
     Button m_ctrlCancel = null;
     Button m_ctrlApply = null;
     LinearLayout m_ctrlGroupMember = null;
@@ -87,7 +86,10 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
     String idMontantCB = "0.0";
     String newDispo = "";
     Button m_ctrlIDPay = null;
-
+    String[] arrSwitchNames = {"Off", "On"};
+    TextView m_ctrlCheckHelp = null;
+    TextView m_ctrlCheck_1_Help = null;
+    CustomOnOffAdapter check, check1 = null;
     CustomProgressDialog progressDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,14 +117,21 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
         m_ctrlIDExtra = (EditText)findViewById(R.id.idExtra);
         m_ctrlIDExtra_Help = (TextView)findViewById(R.id.idExtra_help);
         m_ctrlIDLabelBottom = (TextView)findViewById(R.id.idLabelBottom);
-        m_ctrlCheck = (SwitchButton)findViewById(R.id.check);
-        m_ctrlCheck_Help = (TextView)findViewById(R.id.check_help);
-        m_ctrlCheck_1 = (SwitchButton)findViewById(R.id.check_1);
-        m_ctrlCheck_1_Help = (TextView)findViewById(R.id.check_1_help);
+        m_ctrlCheck = (CheckBox) findViewById(R.id.check);
+
+        m_ctrlCheck_1 = (CheckBox)findViewById(R.id.check_1);
         m_ctrlCancel = (Button)findViewById(R.id.cancel);
         m_ctrlApply = (Button)findViewById(R.id.apply);
         m_ctrlGroupMember = (LinearLayout)findViewById(R.id.group_member);
         m_ctrlIDPay = (Button)findViewById(R.id.idpay);
+        m_ctrlCheckHelp = (TextView)findViewById(R.id.check_help);
+        m_ctrlCheck_1_Help = (TextView)findViewById(R.id.check_1_help);
+
+
+        check = new CustomOnOffAdapter(ViewStatusActivity.this, arrSwitchNames);
+        check1 = new CustomOnOffAdapter(ViewStatusActivity.this, arrSwitchNames);
+
+
 
         NextCashBackVipUser = Constants.currentUser.NewExpectedCashBackVipUserInCaseOfUse;
         NextCashBackClassicUser = Constants.currentUser.NewExpectedCashBackClassicUserInCaseOfUse;
@@ -139,7 +148,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         m_ctrlCancel.setText(getButtonName("btn_annuler", Constants.CurrentLang));
         m_ctrlApply.setText(getButtonName("btn_valider", Constants.CurrentLang));
-        m_ctrlCheck_Help.setText(getButtonName("lab_deduire_dispo", Constants.CurrentLang));
+        m_ctrlCheckHelp.setText(getButtonName("lab_deduire_dispo", Constants.CurrentLang));
 
 
         m_ctrlApply.setOnClickListener(this);
@@ -156,7 +165,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
         m_ctrlIDNew_Money_Help.setText(getButtonName("lab_credit_dispo", Constants.CurrentLang));
         m_ctrlIDMoment_Help.setText(getButtonName("lab_a_payer", Constants.CurrentLang));
         m_ctrlCheck_1_Help.setText(getButtonName("lab_vip", Constants.CurrentLang));
-        m_ctrlCheck_Help.setText(getButtonName("lab_deduire_dispo", Constants.CurrentLang));
+
         m_ctrlIDCoupon_Help.setText(getButtonName("lb_coupon", Constants.CurrentLang));
         m_ctrlLabelLeft.setText(getButtonName("lab_membre", Constants.CurrentLang));
         m_ctrlLabelRight.setText(getButtonName("lab_vip", Constants.CurrentLang));
@@ -283,8 +292,6 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             m_ctrlOption_Right.setChecked(true);
             m_ctrlOption_Left.setChecked(false);
 
-
-
             if(Constants.currentMarket.Partner_AllowChangeUserType == true)
                 m_ctrlVip_Value.setVisibility(View.VISIBLE);
 
@@ -327,12 +334,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         newDispo = Constants.currentUser.decote;
 
-        /*if (Constants.currentUser.user_CashBackDeadLineAlert.toUpperCase().equals("TRUE")) {
-            //idDispo.setStyle("color", '#ff0000');
 
-
-            faderCashBackAlert.play();
-        }*/
 
         if (Constants.currentMarket.market_name.toUpperCase().equals("CENTRE SAINT-JACQUES")) { // en attente de mettre un champs dans Partners pour spécificité
             findViewById(R.id.idGroupBottom).setVisibility(View.GONE);
@@ -435,9 +437,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
                     {
                         m_ctrlCheck_1.setVisibility(View.GONE);
                         m_ctrlCheck_1.setChecked(false);
-                        m_ctrlCheck_1_Help.setVisibility(View.GONE);
                     }
-
                     if(m_ctrlOption_Left.isChecked())
                     {
                         newMoney = formatNumber(NextCashBackClassicUser, 2, true, false);
@@ -447,15 +447,13 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
                     {
                         newMoney = formatNumber("" + Float.parseFloat(NextCashBackVipUser.equals("")?"0.00":NextCashBackVipUser) * Math.round(m_ctrlVip_Value.getProgress()) / 10 , 2, true, false);
                     }
-
-
                 }else
                 {
                     if (Constants.currentUser.market_UserCB == true && Constants.currentMontant >= CBlimit) {
                         m_ctrlCheck_1.setVisibility(View.VISIBLE);
                         m_ctrlCheck_1.setEnabled(true);
                         m_ctrlCheck_1.setChecked(false);
-                        m_ctrlCheck_1_Help.setVisibility(View.VISIBLE);
+
                     }
                     if (m_ctrlOption_Right.isChecked()) {
                         m_ctrlVip_Value.setVisibility(View.VISIBLE);
@@ -478,6 +476,8 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
                 m_ctrlIDNew_Money.setText(newMoney);
             }
         });
+
+
 
         m_ctrlVip_Value.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
@@ -597,10 +597,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             try {
                 Constants.MyXmlToJSON(obj);
                 interpretUserCB();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -613,7 +610,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
         }
     };
 
-    public void interpretUserCB() throws IOException, XmlPullParserException, JSONException {
+    public void interpretUserCB() throws JSONException {
         Constants.currentUser.cards.clear();
 
         Constants.ErrorNumber = Constants.GetMatchString("ErrorNumber");
@@ -637,7 +634,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
             m_ctrlIDPay.setVisibility(View.VISIBLE);
             m_ctrlIDPay.setText(getButtonName("lab_addCB", Constants.CurrentLang));
-            m_ctrlCheck_1_Help.setVisibility(View.GONE);
+
             m_ctrlCheck_1.setVisibility(View.GONE);
 
             return;
@@ -929,7 +926,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         Toast.makeText(ViewStatusActivity.this, getButtonName("lab_processTransac", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-        if (m_ctrlCheck.isChecked()) {
+        if (m_ctrlCheck.isChecked() == true) {
             decote = Constants.currentUser.AmountUsed;
         }
         CbIncaseofuse = Constants.currentMontant - decote;
@@ -1011,10 +1008,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
                     Constants.MyXmlToJSON(str);
 
                     executePaymentInterpret();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1024,7 +1018,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             }
         }
     };
-    public void executePaymentInterpret() throws XmlPullParserException, IOException, JSONException {
+    public void executePaymentInterpret() throws  JSONException {
         Constants.ErrorNumber = Constants.GetMatchString("ErrorNumber");
 
         if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite

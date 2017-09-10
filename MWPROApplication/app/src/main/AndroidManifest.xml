@@ -3,39 +3,24 @@
     package="mwpro.com.mwproapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
-    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- GCM PERMISSIONS -->
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <!--
-        Les autorisations DISABLE_KEYGUARD et WAKE_LOCK doivent être permutées
-        afin d’accéder aux API SystemIdleMode d’AIR.
-    -->
-    <!-- <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/> -->
 
-
-    <!-- Only this application can receive the messages and registration result -->
     <permission
         android:name="air.app.mobiwoom.market.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="air.app.mobiwoom.market.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <!-- <uses-permission android:name="android.permission.CAMERA"/> -->
-    <!-- <uses-permission android:name="android.permission.RECORD_AUDIO"/> -->
-    <!--
-        Les autorisations ACCESS_NETWORK_STATE et ACCESS_WIFI_STATE doivent être
-        permutées afin d’utiliser les API NetworkInfo d’AIR.
-    -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> -->
-    <uses-permission android:name="android.permission.NFC" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="false" />
@@ -47,54 +32,69 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="android.support.multidex.MultiDexApplication"
+
         >
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
 
         <activity android:name=".SignActivity"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ViewAdmin"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
 
         <activity android:name=".ViewCCPay"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ShowMoneyActivity"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ViewSelectPhoneActivity"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
 
         <activity android:name=".ViewCCList"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
 
-        <activity android:name=".VIPActivity" />
+        <activity android:name=".VIPActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
         <activity android:name=".ViewStatusActivity"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ViewCashBackPay"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ViewCreditCard"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".ViewNFCAssign"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:screenOrientation="portrait"
             />
-        <activity android:name=".ViewCreditCardNfc"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
-            />
+
 
     </application>
 
