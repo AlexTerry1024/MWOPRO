@@ -6,39 +6,55 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import de.codecrafters.tableview.TableDataAdapter;
 
 import java.util.List;
+
+import de.codecrafters.tableview.TableDataAdapter;
 
 /**
  * A simple {@link TableDataAdapter} that allows to display 2D-String-Arrays in a {@link de.codecrafters.tableview.TableView}.
  *
  * @author ISchwarz
  */
-public class MySimpleTableDataAdapter extends MyTableDataAdapter<String[]> {
+public class MyImageTableDataAdapter extends MyTableDataAdapter<String[]> {
 
-    private static final String LOG_TAG = MySimpleTableDataAdapter.class.getName();
+    private static final String LOG_TAG = MyImageTableDataAdapter.class.getName();
 
     private int paddingLeft = 3;
     private int paddingTop = 15;
     private int paddingRight = 3;
     private int paddingBottom = 15;
-    private int textSize = 14;
+    private int textSize = 15;
     private int typeface = Typeface.NORMAL;
     private int textColor = 0x99000000;
 
 
-    public MySimpleTableDataAdapter(Context context, final String[][] data) {
+    public MyImageTableDataAdapter(Context context, final String[][] data) {
         super(context, data);
     }
 
-    public MySimpleTableDataAdapter(Context context, final List<String[]> data) {
+    public MyImageTableDataAdapter(Context context, final List<String[]> data) {
         super(context, data);
     }
 
     @Override
     public View getCellView(int rowIndex, int columnIndex, ViewGroup parentView) {
+
+        if(columnIndex == 0)
+        {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            String str = getItem(rowIndex)[columnIndex];
+
+            imageView.setImageResource(Integer.parseInt(str));
+
+            return imageView;
+        }
         TextView textView = new TextView(getContext());
         textView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         textView.setTypeface(textView.getTypeface(), typeface);

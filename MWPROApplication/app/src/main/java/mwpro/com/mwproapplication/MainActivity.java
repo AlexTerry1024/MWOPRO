@@ -76,7 +76,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         dialog = new CustomProgressDialog(MainActivity.this, "");
         m_ctrlPhone_number = (EditText)findViewById(R.id.phone_number);
         m_ctrlPincode = (EditText)findViewById(R.id.pincode);
@@ -163,6 +162,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 return false;
             }
         });
+
+        m_ctrlPhone_number.requestFocus();
     }
 
     public void initButtonUI()
@@ -407,8 +408,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         @Override
         public void handleMessage(Message msg) {
             String str = (String)msg.obj;
-
-
 
             if(msg.arg2 == Constants.NET_ERR)
             {
@@ -726,6 +725,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 MyXmlToJSON(str);
 
                 CreditCardInfo();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -803,11 +803,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         if(Constants.ErrorNumber.equals("9"))
                         {
                             Toast.makeText(MainActivity.this, getButtonName("lab_PhonePro", Constants.CurrentLang) + "?", Toast.LENGTH_LONG).show();
-
+                            vibrate(MainActivity.this);
                             return;
                         }else
                         {
                             Toast.makeText(MainActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang) + "?", Toast.LENGTH_LONG).show();
+
+                            vibrate(MainActivity.this);
 
                             return;
                         }

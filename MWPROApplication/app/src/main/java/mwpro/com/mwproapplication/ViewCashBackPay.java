@@ -31,6 +31,7 @@ import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 
 import static mwpro.com.mwproapplication.Constants.formatNumber;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 
 public class ViewCashBackPay extends Activity implements View.OnClickListener{
@@ -74,6 +75,7 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
         m_ctrlTotal = (EditText)findViewById(R.id.total);
 
         m_ctrlBanner = (ImageView)findViewById(R.id.banner_button);
+        m_ctrlBanner.setOnClickListener(this);
         m_ctrlEnterPinCode = (TextInputLayout)findViewById(R.id.codePin_Help);
         m_ctrlEnterPinCode.setHint(getButtonName("lab_enterCodePin", Constants.CurrentLang));
         m_ctrlCodePin = (EditText)findViewById(R.id.codePin);
@@ -193,12 +195,16 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
                 {
                     Toast.makeText(ViewCashBackPay.this, getButtonName("lab_PincodeUnlnownUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                    vibrate(ViewCashBackPay.this);
+
                     return;
                 }
 
                 if(Constants.ErrorNumber.equals("23"))
                 {
                     Toast.makeText(ViewCashBackPay.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    vibrate(ViewCashBackPay.this);
 
                     return;
                 }
@@ -213,6 +219,8 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
                 }else
                 {
                     Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    vibrate(ViewCashBackPay.this);
 
                     return;
                 }
@@ -233,22 +241,22 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
             if(msg.arg2 == Constants.NET_ERR)
             {
                 Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(ViewCashBackPay.this);
+
                 return;
             }
             try {
                 MyXmlToJSON(strObj);
                 Send();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    public void Send() throws XmlPullParserException, IOException, JSONException {
+    public void Send() throws  JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
@@ -256,11 +264,15 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
         {
             Toast.makeText(ViewCashBackPay.this, getButtonName("lab_PincodeUnlnownUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();;
 
+            vibrate(ViewCashBackPay.this);
+
             return;
         }
         if(Constants.ErrorNumber.equals("23"))
         {
             Toast.makeText(ViewCashBackPay.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();;
+
+            vibrate(ViewCashBackPay.this);
 
             return;
         }
@@ -268,6 +280,8 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
         if(!Constants.ErrorNumber.equals("0"))
         {
             Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();;
+
+            vibrate(ViewCashBackPay.this);
 
             return;
         }
@@ -314,6 +328,8 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
             {
                 Toast.makeText(ViewCashBackPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ViewCashBackPay.this);
+
                 Intent i = new Intent(ViewCashBackPay.this, ShowMoneyActivity.class);
 
                 startActivity(i);
@@ -341,6 +357,8 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
         {
             Toast.makeText(ViewCashBackPay.this, getButtonName("lab_UnderMaintenance", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(ViewCashBackPay.this);
+
             Intent i = new Intent(ViewCashBackPay.this, MainActivity.class);
 
             startActivity(i);
@@ -353,7 +371,7 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
         if(Constants.ErrorNumber.equals("20"))
         {
             nErrorCount ++;
-
+            vibrate(ViewCashBackPay.this);
             m_ctrlCodePin.setText("");
 
             Toast.makeText(ViewCashBackPay.this, getButtonName("lab_codePinError", Constants.CurrentLang) + nErrorCount + "/3", Toast.LENGTH_LONG).show();
@@ -388,7 +406,7 @@ public class ViewCashBackPay extends Activity implements View.OnClickListener{
             return;
 
         }
-
+        vibrate(ViewCashBackPay.this);
         if(Constants.ErrorNumber.equals("200"))
         {
             if(Constants.currentMarket.market_cb == false)

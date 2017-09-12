@@ -33,8 +33,10 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import de.codecrafters.tableview.listeners.TableDataClickListener;
+import de.codecrafters.tableview.model.TableColumnWeightModel;
 import mwpro.com.mwproapplication.data.MyTitles;
 import mwpro.com.mwproapplication.ui.CustomProgressDialog;
+import mwpro.com.mwproapplication.ui.MyImageTableDataAdapter;
 import mwpro.com.mwproapplication.ui.MySimpleTableDataAdapter;
 import mwpro.com.mwproapplication.ui.MySimpleTableHeaderAdapter;
 import mwpro.com.mwproapplication.ui.MyTableView;
@@ -207,6 +209,8 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
         tipsLabel.setText(getButtonName("lab_tips", Constants.CurrentLang) + " : " + formatNumber("" + Constants.currentMontant * 0.15, 2, true, false) + " ?") ;
 
         initUI();
+
+        codePin.requestFocus();
     }
     public void selectMarket()
     {
@@ -224,7 +228,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
         {
             String[] xml = new String[4];
 
-            xml[0] = Constants.currentMarket.card.get(i).strType;
+            xml[0] = "" + Constants.currentMarket.card.get(i).nImage;
             xml[1] = Constants.currentMarket.card.get(i).strNumberMini;
             xml[2] = Constants.currentMarket.card.get(i).strExpDate;
             xml[3] = Constants.currentMarket.card.get(i).strTagMini;
@@ -234,7 +238,18 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
 
         tableView.setHeaderAdapter(adapter);
 
-        MySimpleTableDataAdapter dataAdapter = new MySimpleTableDataAdapter(ViewCCPay.this, arrayList);
+        tableView.setColumnCount(4);
+
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(4);
+
+        columnModel.setColumnWeight(0, 2);
+        columnModel.setColumnWeight(1, 5);
+        columnModel.setColumnWeight(2, 2);
+        columnModel.setColumnWeight(3, 1);
+
+        tableView.setColumnModel(columnModel);
+
+        MyImageTableDataAdapter dataAdapter = new MyImageTableDataAdapter(ViewCCPay.this, arrayList);
 
         tableView.setDataAdapter(dataAdapter);
 
@@ -284,7 +299,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
         {
             String[] xml = new String[4];
 
-            xml[0] = Constants.currentUser.cards.get(i).strType;
+            xml[0] = "" + Constants.currentUser.cards.get(i).nImage;
             xml[1] = Constants.currentUser.cards.get(i).strNumberMini;
             xml[2] = Constants.currentUser.cards.get(i).strExpDate;
             xml[3] = Constants.currentUser.cards.get(i).strTagMini;
@@ -292,9 +307,19 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             arrayList.add(xml);
         }
 
+        tableView.setColumnCount(4);
+
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(4);
+
+        columnModel.setColumnWeight(0, 2);
+        columnModel.setColumnWeight(1, 5);
+        columnModel.setColumnWeight(2, 2);
+        columnModel.setColumnWeight(3, 1);
+
+        tableView.setColumnModel(columnModel);
         tableView.setHeaderAdapter(adapter);
 
-        MySimpleTableDataAdapter dataAdapter = new MySimpleTableDataAdapter(ViewCCPay.this, arrayList);
+        MyImageTableDataAdapter dataAdapter = new MyImageTableDataAdapter(ViewCCPay.this, arrayList);
 
         tableView.setDataAdapter(dataAdapter);
 
@@ -622,6 +647,8 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             {
                 Toast.makeText(ViewCCPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ViewCCPay.this);
+
                 return;
             }
 
@@ -634,12 +661,16 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
                 {
                     Toast.makeText(ViewCCPay.this, getButtonName("lab_PincodeUnlnownUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                    vibrate(ViewCCPay.this);
+
                     return;
                 }
 
                 if(Constants.ErrorNumber.equals("23"))
                 {
                     Toast.makeText(ViewCCPay.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                    vibrate(ViewCCPay.this);
 
                     return;
                 }
@@ -654,7 +685,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
                 }else
                 {
                     Toast.makeText(ViewCCPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+                    vibrate(ViewCCPay.this);
                     return;
                 }
             } catch (JSONException e) {
@@ -725,6 +756,8 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
                 }
             }else
             {
+                vibrate(ViewCCPay.this);
+
                 Toast.makeText(ViewCCPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(ViewCCPay.this, ViewStatusActivity.class);
@@ -747,6 +780,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
 
         if (Constants.ErrorNumber.equals("200"))
         {
+            vibrate(ViewCCPay.this);
             if (Constants.currentMarket.market_cb == false) {
 
                 Toast.makeText(ViewCCPay.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -791,6 +825,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             return;
         }else if(Constants.ErrorNumber.equals("20"))
         {
+            vibrate(ViewCCPay.this);
             _countErreur ++;
 
             codePin.setText("");
@@ -809,6 +844,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
         }
         else if (Constants.ErrorNumber.equals("250"))   // test si erreur Payline - code Payline dans Message
         {
+            vibrate(ViewCCPay.this);
             String[] arrays = strMessage.split(" : ");
 
             Toast.makeText(ViewCCPay.this, arrays[1], Toast.LENGTH_LONG).show();
@@ -819,9 +855,12 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             finish();
         }
         else if (Constants.ErrorNumber.equals("257") || Constants.ErrorNumber.equals("256")) {
+            vibrate(ViewCCPay.this);
+
             Toast.makeText(ViewCCPay.this, strMessage, Toast.LENGTH_LONG).show();
 
             Constants.currentUser.cards.remove(Constants.CCIndex);
+
             Intent i = new Intent(ViewCCPay.this, ViewCCPay.class);
 
             startActivity(i);
@@ -829,6 +868,8 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             finish();
         }
         else {
+            vibrate(ViewCCPay.this);
+
             Toast.makeText(ViewCCPay.this, strMessage, Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ViewCCPay.this, ShowMoneyActivity.class);
@@ -860,6 +901,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
                 }
             }else
             {
+                vibrate(ViewCCPay.this);
 
                 Toast.makeText(ViewCCPay.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
@@ -886,6 +928,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
         {
             if(Constants.CodeError.equals("200"))
             {
+
                 executePayment(Constants.CurrentTotalAmount, Constants.CurrentUsedPrice, Constants.CurrentTag, Constants.CurrentPercentage, Constants.CurrentUsedCB, "");
             }else
             {
@@ -901,6 +944,7 @@ public class ViewCCPay extends Activity implements View.OnClickListener{
             }
         }else
         {
+            vibrate(ViewCCPay.this);
             Constants.viewVipText1 = strMessage;
             Constants.paymentError = strMessage;
 

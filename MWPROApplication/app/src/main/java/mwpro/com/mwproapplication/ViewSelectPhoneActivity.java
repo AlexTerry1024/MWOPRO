@@ -37,6 +37,7 @@ import mwpro.com.mwproapplication.data.UserVo;
 import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 
 import static com.google.android.gms.analytics.internal.zzy.i;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 public class ViewSelectPhoneActivity extends Activity implements View.OnClickListener{
 
@@ -249,6 +250,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
         {
             Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(ViewSelectPhoneActivity.this);
+
             return;
         }
 
@@ -272,6 +275,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(Constants.ErrorNumber.equals("23"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lb_market_off", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 return;
@@ -279,6 +284,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(Constants.ErrorNumber.equals("22"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 Intent i = new Intent(ViewSelectPhoneActivity.this, ViewNFCAssign.class);
 
                 i.putExtra("CouponNumber", strCouNumber);
@@ -292,6 +299,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(Constants.ErrorNumber.equals("241") || Constants.ErrorNumber.equals("21")|| Constants.ErrorNumber.equals("9"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lb_AccessKeyUnknown", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 return;
@@ -299,6 +308,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(Constants.ErrorNumber.equals("243"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 return;
@@ -306,6 +317,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(Constants.ErrorNumber.equals("20"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 showUserAddNew();
 
                 return;
@@ -313,6 +326,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
 
             if(!Constants.ErrorNumber.equals("0"))
             {
+                vibrate(ViewSelectPhoneActivity.this);
+
                 Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(ViewSelectPhoneActivity.this, ShowMoneyActivity.class);
@@ -419,6 +434,8 @@ public class ViewSelectPhoneActivity extends Activity implements View.OnClickLis
         customDialog.dismiss();
         if(!Constants.ErrorNumber.equals("0"))
         {
+            vibrate(ViewSelectPhoneActivity.this);
+
             Toast.makeText(ViewSelectPhoneActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show(); //
 
             Intent i = new Intent(ViewSelectPhoneActivity.this, ShowMoneyActivity.class);

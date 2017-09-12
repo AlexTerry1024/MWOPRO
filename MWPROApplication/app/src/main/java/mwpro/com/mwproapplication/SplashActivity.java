@@ -194,6 +194,8 @@ public class SplashActivity extends Activity {
 
         if(Constants.ErrorNumber.equals("11")) {
 
+            vibrate(SplashActivity.this);
+
             Toast.makeText(SplashActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
@@ -208,6 +210,7 @@ public class SplashActivity extends Activity {
         if(!Constants.ErrorNumber.equals("0")) {
 
             vibrate(SplashActivity.this);
+
             Toast.makeText(SplashActivity.this, getButtonName("lab_ErrorLogin", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
@@ -271,6 +274,8 @@ public class SplashActivity extends Activity {
 
         if (Constants.ErrorNumber.equals("11")) {
 
+            vibrate(SplashActivity.this);
+
             Toast.makeText(SplashActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
@@ -285,6 +290,7 @@ public class SplashActivity extends Activity {
 
         if(!Constants.ErrorNumber.equals("0"))
         {
+            vibrate(SplashActivity.this);
             Constants.currentMarket.market_cb = false;
             if(Constants.currentMarket.market_Cluster.equals("0") && Constants.currentMarket.market_Insolvent.equals("false"))
             {
@@ -502,6 +508,8 @@ public class SplashActivity extends Activity {
             if(msg.arg2 == Constants.NET_ERR)
             {
                 Toast.makeText(SplashActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(SplashActivity.this);
 
                 finish();
 

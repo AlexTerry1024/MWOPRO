@@ -50,6 +50,7 @@ import retrofit2.http.GET;
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
+import static mwpro.com.mwproapplication.Constants.vibrate;
 
 public class ShowMoneyActivity extends Activity implements View.OnClickListener, LocationListener {
 
@@ -419,6 +420,8 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
             {
                 Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+                vibrate(ShowMoneyActivity.this);
+
                 return;
             }
         }
@@ -438,11 +441,14 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         {
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lb_market_off", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
+            vibrate(ShowMoneyActivity.this);
+
             return;
         }
 
         if(Constants.ErrorNumber.equals("22"))
         {
+            vibrate(ShowMoneyActivity.this);
             Intent i = new Intent(ShowMoneyActivity.this, ViewNFCAssign.class);
 
             startActivity(i);
@@ -455,28 +461,28 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         if(Constants.ErrorNumber.equals("241") || Constants.ErrorNumber.equals("21")|| Constants.ErrorNumber.equals("9"))
         {
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lb_AccessKeyUnknown", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ShowMoneyActivity.this);
             return;
         }
 
         if(Constants.ErrorNumber.equals("243"))
         {
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_DisabledUser", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ShowMoneyActivity.this);
             return;
         }
 
         if(Constants.ErrorNumber.equals("20"))
         {
             showUserAddNew();
-
+            vibrate(ShowMoneyActivity.this);
             return;
         }
 
         if(!Constants.ErrorNumber.equals("0"))
         {
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ShowMoneyActivity.this);
             return;
         }
 
@@ -531,7 +537,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         if(Constants.ErrorNumber.equals("11"))
         {
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
+            vibrate(ShowMoneyActivity.this);
             return;
         }
         if(!Constants.ErrorNumber.equals("0"))
@@ -539,6 +545,8 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
             Constants.currentMarket.market_cb = false;
             if(Constants.currentMarket.market_Cluster.equals("0") && Constants.currentMarket.market_Insolvent.equals("false"))
             {
+                vibrate(ShowMoneyActivity.this);
+
                 Intent i = new Intent(ShowMoneyActivity.this, ShowMoneyActivity.class);
 
                 startActivity(i);
@@ -548,6 +556,8 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
                 return;
             }else if(Constants.currentMarket.market_BalanceColor == null || Constants.currentMarket.market_BalanceColor.equals("") || Constants.currentMarket.market_BalanceColor.equals("Green"))
             {
+                vibrate(ShowMoneyActivity.this);
+
                 Intent i = new Intent(ShowMoneyActivity.this, ShowMoneyActivity.class);
 
                 startActivity(i);
@@ -559,6 +569,8 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
             {
 
                 Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_ActiviateAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(ShowMoneyActivity.this);
 
                 Intent i = new Intent(ShowMoneyActivity.this, ViewCCPay.class);
 
@@ -719,8 +731,6 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
 
             Constants.AmountCB = Constants.currentMarket.market_ToPay;
 
-            //Show CCPAY
-
             Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_ToPay", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ShowMoneyActivity.this, ViewCCPay.class);
@@ -764,6 +774,8 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
             }else
             {
                 Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
+
+                vibrate(ShowMoneyActivity.this);
                 Intent i = new Intent(ShowMoneyActivity.this, ViewStatusActivity.class);
 
                 startActivity(i);
@@ -778,7 +790,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
 
         if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
         {
-
+            vibrate(ShowMoneyActivity.this);
             if (Constants.currentMarket.market_cb == false) {
 
                 Toast.makeText(ShowMoneyActivity.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -819,23 +831,25 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
         }
         else if (Constants.ErrorNumber.equals("250"))   // test si erreur Payline - code Payline dans Message
         {
-           String[] arrays = Constants.Message.split(" : ");
-
+            String[] arrays = Constants.Message.split(" : ");
+            vibrate(ShowMoneyActivity.this);
             Toast.makeText(ShowMoneyActivity.this, arrays[1], Toast.LENGTH_LONG).show();
 
             return;
         }
         else if (Constants.ErrorNumber.equals("257") || Constants.ErrorNumber.equals("256")) {
-                Toast.makeText(ShowMoneyActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
+            vibrate(ShowMoneyActivity.this);
+            Toast.makeText(ShowMoneyActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
 
-                Constants.currentUser.cards.remove(Constants.CCIndex);
-                Intent i = new Intent(ShowMoneyActivity.this, ViewCCPay.class);
+            Constants.currentUser.cards.remove(Constants.CCIndex);
+            Intent i = new Intent(ShowMoneyActivity.this, ViewCCPay.class);
 
-                startActivity(i);
+            startActivity(i);
 
-                finish();
+            finish();
         }
         else {
+            vibrate(ShowMoneyActivity.this);
             Toast.makeText(ShowMoneyActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ShowMoneyActivity.this, ShowMoneyActivity.class);
@@ -899,6 +913,7 @@ public class ShowMoneyActivity extends Activity implements View.OnClickListener,
                 MyXmlToJSON(str);
 
                 CreditInterpret();
+
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             } catch (IOException e) {
