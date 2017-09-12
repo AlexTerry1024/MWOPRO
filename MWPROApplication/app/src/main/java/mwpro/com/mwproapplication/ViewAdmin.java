@@ -48,11 +48,6 @@ public class ViewAdmin extends FragmentActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, ViewSetup.newInstance());
         transaction.commit();
-
-
-
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(null, 0);
     }
 
     @Override

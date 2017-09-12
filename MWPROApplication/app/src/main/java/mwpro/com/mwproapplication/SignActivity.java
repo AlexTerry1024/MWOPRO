@@ -209,8 +209,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
 
                 m_ctrlBizNumber.requestFocus();
 
-                vibrate(SignActivity.this);
-
                 return;
             }
 
@@ -222,16 +220,12 @@ public class SignActivity extends Activity implements View.OnClickListener{
 
                 m_ctrlEmail.requestFocus();
 
-                vibrate(SignActivity.this);
-
                 return;
             }else
             {
                 if(isValidEmail(strEmail) == false)
                 {
                     Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                    vibrate(SignActivity.this);
 
                     m_ctrlEmail.requestFocus();
 
@@ -246,9 +240,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 m_ctrlBusinessName.requestFocus();
-
-                vibrate(SignActivity.this);
-
                 return;
             }
 
@@ -259,8 +250,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 m_ctrlAddress.requestFocus();
-
-                vibrate(SignActivity.this);
 
                 return;
             }
@@ -273,8 +262,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
 
                 m_ctrlZipCode.requestFocus();
 
-                vibrate(SignActivity.this);
-
                 return;
             }
 
@@ -285,8 +272,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 m_ctrlCity.requestFocus();
-
-                vibrate(SignActivity.this);
 
                 return;
             }
@@ -299,8 +284,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
 
                 m_ctrlMemberCashBack.requestFocus();
 
-                vibrate(SignActivity.this);
-
                 return;
             }
 
@@ -311,8 +294,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(SignActivity.this, getButtonName("lab_fillalltabs", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 m_ctrlVIPCashBack.requestFocus();
-
-                vibrate(SignActivity.this);
 
                 return;
             }
@@ -418,7 +399,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
                 addNewInterpret();
             } catch (JSONException e) {
                 customProgressDialog.dismiss();
-
                 e.printStackTrace();
             }
         }
@@ -430,8 +410,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
         if(!Constants.ErrorNumber.equals("0"))
         {
             Toast.makeText(SignActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(SignActivity.this);
 
             return;
         }
@@ -459,7 +437,6 @@ public class SignActivity extends Activity implements View.OnClickListener{
         startActivity(i);
 
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
         finish();
     }
 

@@ -299,9 +299,6 @@ public class ViewCreditCard extends Activity implements View.OnClickListener{
 
         if(!Constants.ErrorNumber.equals("0")) {
             String[] temp = Constants.Message.split("] : ");
-
-            vibrate(ViewCreditCard.this);
-
             if(temp.length > 1)
                 Toast.makeText(ViewCreditCard.this, temp[1], Toast.LENGTH_LONG).show();
             else

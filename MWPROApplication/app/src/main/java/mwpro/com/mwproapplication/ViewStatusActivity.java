@@ -40,7 +40,6 @@ import mwpro.com.mwproapplication.ui.CustomProgressDialog;
 
 import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
-import static mwpro.com.mwproapplication.Constants.vibrate;
 import static mwpro.com.mwproapplication.R.id.idGroupBottom;
 
 public class ViewStatusActivity extends Activity implements View.OnClickListener{
@@ -592,8 +591,6 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             {
                 Toast.makeText(ViewStatusActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                vibrate(ViewStatusActivity.this);
-
                 return;
             }
 
@@ -620,8 +617,6 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         if(Constants.ErrorNumber.equals("11"))
         {
-            vibrate(ViewStatusActivity.this);
-
             Toast.makeText(ViewStatusActivity.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ViewStatusActivity.this, ViewAdmin.class);
@@ -635,12 +630,9 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         if(!Constants.ErrorNumber.equals("0"))
         {
-            vibrate(ViewStatusActivity.this);
-
             Constants.currentUser.market_UserCB = false;
 
             m_ctrlIDPay.setVisibility(View.VISIBLE);
-
             m_ctrlIDPay.setText(getButtonName("lab_addCB", Constants.CurrentLang));
 
             m_ctrlCheck_1.setVisibility(View.GONE);
@@ -1023,8 +1015,6 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             }else
             {
                 Toast.makeText(ViewStatusActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                vibrate(ViewStatusActivity.this);
             }
         }
     };
@@ -1033,8 +1023,6 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
 
         if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
         {
-            vibrate(ViewStatusActivity.this);
-
             if (Constants.currentMarket.market_cb == false) {
 
                 Toast.makeText(ViewStatusActivity.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -1065,9 +1053,7 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
         Constants.Message = Constants.GetMatchString("Message");
 
         if (Constants.ErrorNumber.equals("0")) {
-
             Constants.ProcessToken = Constants.GetMatchString("ProcessToken");;
-
             Toast.makeText(ViewStatusActivity.this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Constants.currentMarket.market_ToPay = 0;
@@ -1080,12 +1066,9 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
         }
         else if (Constants.ErrorNumber.equals("250"))   // test si erreur Payline - code Payline dans Message
         {
-            vibrate(ViewStatusActivity.this);
-
-            String[] arrays = Constants.Message.split(" : ");
+           String[] arrays = Constants.Message.split(" : ");
 
             Toast.makeText(ViewStatusActivity.this, arrays[1], Toast.LENGTH_LONG).show();
-
             Intent i = new Intent(ViewStatusActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -1093,20 +1076,16 @@ public class ViewStatusActivity extends Activity implements View.OnClickListener
             finish();
         }
         else if (Constants.ErrorNumber.equals("257") || Constants.ErrorNumber.equals("256")) {
-            vibrate(ViewStatusActivity.this);
+                Toast.makeText(ViewStatusActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
 
-            Toast.makeText(ViewStatusActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
+                Constants.currentUser.cards.remove(Constants.CCIndex);
+                Intent i = new Intent(ViewStatusActivity.this, ViewCCPay.class);
 
-            Constants.currentUser.cards.remove(Constants.CCIndex);
+                startActivity(i);
 
-            Intent i = new Intent(ViewStatusActivity.this, ViewCCPay.class);
-
-            startActivity(i);
-
-            finish();
+                finish();
         }
         else {
-            vibrate(ViewStatusActivity.this);
             Toast.makeText(ViewStatusActivity.this, Constants.Message, Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ViewStatusActivity.this, ShowMoneyActivity.class);

@@ -482,7 +482,6 @@ public class VIPActivity extends Activity {
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
         if (Constants.ErrorNumber.equals("9")) {
-            vibrate(VIPActivity.this);
 
             Toast.makeText(VIPActivity.this, getButtonName("lab_ErrorPhoneFormat", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
@@ -491,14 +490,11 @@ public class VIPActivity extends Activity {
             startActivity(i);
 
             finish();
-
             return;
         } else if (Constants.ErrorNumber.equals("30")) {
-
             Toast.makeText(VIPActivity.this, getButtonName("lab_UserPhoneExist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             vibrate(VIPActivity.this);
-
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -506,54 +502,34 @@ public class VIPActivity extends Activity {
             finish();
             return;
         } else if (Constants.ErrorNumber.equals("31")) {
-
             Toast.makeText(VIPActivity.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             vibrate(VIPActivity.this);
-
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
-
             startActivity(i);
-
             finish();
-
             return;
         } else if (Constants.ErrorNumber.equals("241")) {
-            Toast.makeText(VIPActivity.this, getButtonName("lab_vip_no_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             vibrate(VIPActivity.this);
-
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
-
             startActivity(i);
-
             finish();
-
             return;
         } else if (Constants.ErrorNumber.equals("243")) {
-            Toast.makeText(VIPActivity.this, getButtonName("lab_vip_no_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             vibrate(VIPActivity.this);
-
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         } else if (!Constants.ErrorNumber.equals("0")) {
             //    erreurHome = _controller.res.g('lab_vip_no_ok');
-            Toast.makeText(VIPActivity.this, getButtonName("lab_vip_no_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(VIPActivity.this);
-
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         }
 
@@ -623,8 +599,6 @@ public class VIPActivity extends Activity {
                 }
             }else
             {
-                vibrate(VIPActivity.this);
-
                 Toast.makeText(VIPActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(VIPActivity.this, ViewStatusActivity.class);
@@ -645,8 +619,6 @@ public class VIPActivity extends Activity {
 
         if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
         {
-            vibrate(VIPActivity.this);
-
             if (Constants.currentMarket.market_cb == false) {
 
                 Toast.makeText(this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -680,7 +652,6 @@ public class VIPActivity extends Activity {
 
         if (Constants.ErrorNumber.equals("0")) {
             Constants.ProcessToken = strProcessToken;
-
             Toast.makeText(this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Constants.currentMarket.market_ToPay = 0;
@@ -691,17 +662,12 @@ public class VIPActivity extends Activity {
             startActivity(i);
 
             finish();
-
-            return;
         }
         else if (Constants.ErrorNumber.equals("250"))   // test si erreur Payline - code Payline dans Message
         {
-            vibrate(VIPActivity.this);
-
             String[] arrays = strMessage.split(" : ");
 
             Toast.makeText(this, arrays[1], Toast.LENGTH_LONG).show();
-
             Intent i = new Intent(this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -709,12 +675,9 @@ public class VIPActivity extends Activity {
             finish();
         }
         else if (Constants.ErrorNumber.equals("257") || Constants.ErrorNumber.equals("256")) {
-            vibrate(VIPActivity.this);
-
             Toast.makeText(this, strMessage, Toast.LENGTH_LONG).show();
 
             Constants.currentUser.cards.remove(Constants.CCIndex);
-
             Intent i = new Intent(this, ViewCCPay.class);
 
             startActivity(i);
@@ -722,8 +685,6 @@ public class VIPActivity extends Activity {
             finish();
         }
         else {
-            vibrate(VIPActivity.this);
-
             Toast.makeText(this, strMessage, Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
@@ -773,7 +734,6 @@ public class VIPActivity extends Activity {
 
         customProgressDialog.show();
         customProgressDialog.setCancelable(false);
-
         processing.SendPost(strApi, executePaymentHandle);
     }
 
@@ -821,13 +781,15 @@ public class VIPActivity extends Activity {
                     MyXmlToJSON(strObj);
 
                     interpretExecuteCoupon(strObj);
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else
             {
-                vibrate(VIPActivity.this);
-
                 Toast.makeText(VIPActivity.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(context, ShowMoneyActivity.class);
@@ -839,13 +801,11 @@ public class VIPActivity extends Activity {
         }
     };
 
-    public void interpretExecuteCoupon(String strXml) throws JSONException {
+    public void interpretExecuteCoupon(String strXml) throws XmlPullParserException, IOException, JSONException {
 
         Constants.ErrorNumber = GetMatchString("ErrorNumber");
 
         if(!Constants.ErrorNumber.equals("0")) {
-            vibrate(VIPActivity.this);
-
             Toast.makeText(context, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show(); //
 
             Intent i = new Intent(VIPActivity.this, ShowMoneyActivity.class);
@@ -857,7 +817,6 @@ public class VIPActivity extends Activity {
             Constants.ProcessToken = GetMatchString("ProcessToken");
 
             Toast.makeText(VIPActivity.this, getButtonName("lab_credit_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show(); //
-
             Constants.currentMarket.market_ToPay = 0;
             Constants.currentMarket.market_status = "1";
 

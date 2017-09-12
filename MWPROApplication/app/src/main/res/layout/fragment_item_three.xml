@@ -17,25 +17,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
-            <LinearLayout
-                android:layout_width="match_parent"
+            <LinearLayout android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 >
                 <mwpro.com.mwproapplication.ui.MyTableView
                     xmlns:table="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/tableView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    table:tableView_headerColor="@color/blue_100"
+                    table:tableView_headerColor="@color/colorPrimary"
                     table:tableView_columnCount="4"
                     table:tableView_headerElevation="10"
                     android:divider="#FFFFFF"
                     android:dividerHeight="1dip"
                     android:clickable="true"
-                    android:layout_marginTop="20dp"
 
                     />
             </LinearLayout>
@@ -61,7 +57,6 @@
                         android:text="Mail Me"
                         android:textColor="@color/colorWhite"
                         android:layout_centerInParent="true"
-                        android:layout_marginBottom="20dp"
                         />
                 </RelativeLayout>
 

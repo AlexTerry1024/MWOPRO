@@ -20,11 +20,11 @@ public class MySimpleTableDataAdapter extends MyTableDataAdapter<String[]> {
 
     private static final String LOG_TAG = MySimpleTableDataAdapter.class.getName();
 
-    private int paddingLeft = 3;
+    private int paddingLeft = 20;
     private int paddingTop = 15;
-    private int paddingRight = 3;
+    private int paddingRight = 20;
     private int paddingBottom = 15;
-    private int textSize = 14;
+    private int textSize = 18;
     private int typeface = Typeface.NORMAL;
     private int textColor = 0x99000000;
 

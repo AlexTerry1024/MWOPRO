@@ -215,8 +215,6 @@ public class ViewNFCAssign extends Activity {
 
         if (Constants.ErrorNumber.equals("9")) {
 
-            vibrate(ViewNFCAssign.this);
-
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_ErrorPhoneFormat", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
@@ -227,9 +225,7 @@ public class ViewNFCAssign extends Activity {
             return;
         } else if (Constants.ErrorNumber.equals("30")) {
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             vibrate(ViewNFCAssign.this);
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -238,50 +234,39 @@ public class ViewNFCAssign extends Activity {
             return;
         } else if (Constants.ErrorNumber.equals("31")) {
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             vibrate(ViewNFCAssign.this);
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         } else if (Constants.ErrorNumber.equals("241")) {
             //   erreurHome = _controller.res.g('pEvt.result.ErrorMessage');
             vibrate(ViewNFCAssign.this);
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         } else if (Constants.ErrorNumber.equals("243")) {
             vibrate(ViewNFCAssign.this);
-
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_UserPhoneExistAsPartner", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         } else if (!Constants.ErrorNumber.equals("0")) {
             vibrate(ViewNFCAssign.this);
-
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_vip_no_ok", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
 
             finish();
-
             return;
         }
 
@@ -396,8 +381,6 @@ public class ViewNFCAssign extends Activity {
         {
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show(); //
 
-            vibrate(ViewNFCAssign.this);
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             finish();
@@ -444,8 +427,6 @@ public class ViewNFCAssign extends Activity {
                 }
             }else
             {
-                vibrate(ViewNFCAssign.this);
-
                 Toast.makeText(ViewNFCAssign.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
@@ -520,12 +501,8 @@ public class ViewNFCAssign extends Activity {
             {
                 Toast.makeText(ViewNFCAssign.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                vibrate(ViewNFCAssign.this);
-
                 Intent i = new Intent(ViewNFCAssign.this, ViewStatusActivity.class);
-
                 startActivity(i);
-
                 finish();
             }
         }
@@ -540,8 +517,6 @@ public class ViewNFCAssign extends Activity {
 
         if (Constants.ErrorNumber.equals("200"))   // test si Partner Insolvent et en théorie pas de règlement par CB car la CB recrédite
         {
-            vibrate(ViewNFCAssign.this);
-
             if (Constants.currentMarket.market_cb == false) {
 
                 Toast.makeText(ViewNFCAssign.this, getButtonName("lab_ValidAccount", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -591,10 +566,8 @@ public class ViewNFCAssign extends Activity {
         {
             _countErreur ++;
 
-            vibrate(ViewNFCAssign.this);
 
             Toast.makeText(ViewNFCAssign.this, getButtonName("lab_codePinError", Constants.CurrentLang) + " " + _countErreur + "/3", Toast.LENGTH_LONG).show();
-
             if(_countErreur == 3)
             {
                 Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
@@ -610,10 +583,7 @@ public class ViewNFCAssign extends Activity {
         {
             String[] arrays = strMessage.split(" : ");
 
-            vibrate(ViewNFCAssign.this);
-
             Toast.makeText(ViewNFCAssign.this, arrays[1], Toast.LENGTH_LONG).show();
-
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 
             startActivity(i);
@@ -623,10 +593,7 @@ public class ViewNFCAssign extends Activity {
         else if (Constants.ErrorNumber.equals("257") || Constants.ErrorNumber.equals("256")) {
             Toast.makeText(ViewNFCAssign.this, strMessage, Toast.LENGTH_LONG).show();
 
-            vibrate(ViewNFCAssign.this);
-
             Constants.currentUser.cards.remove(Constants.CCIndex);
-
             Intent i = new Intent(ViewNFCAssign.this, ViewCCPay.class);
 
             startActivity(i);
@@ -635,8 +602,6 @@ public class ViewNFCAssign extends Activity {
         }
         else {
             Toast.makeText(ViewNFCAssign.this, strMessage, Toast.LENGTH_LONG).show();
-
-            vibrate(ViewNFCAssign.this);
 
             Intent i = new Intent(ViewNFCAssign.this, ShowMoneyActivity.class);
 

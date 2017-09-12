@@ -50,7 +50,6 @@ import static mwpro.com.mwproapplication.Constants.GETJSONOBJECT;
 import static mwpro.com.mwproapplication.Constants.GetMatchString;
 import static mwpro.com.mwproapplication.Constants.MyXmlToJSON;
 import static mwpro.com.mwproapplication.Constants.getButtonName;
-import static mwpro.com.mwproapplication.Constants.vibrate;
 
 public class ViewClosing extends Fragment {
 
@@ -145,8 +144,6 @@ public class ViewClosing extends Fragment {
 
                 Toast.makeText(ViewClosing.this.getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                vibrate(ViewClosing.this.getActivity());
-
                 return;
             }
 
@@ -166,8 +163,6 @@ public class ViewClosing extends Fragment {
 
         if (!Constants.ErrorNumber.equals("0")) {
             Toast.makeText(this.getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(ViewClosing.this.getActivity());
 
             return;
         }
@@ -243,6 +238,9 @@ public class ViewClosing extends Fragment {
         customProgressDialog.show();
 
         customProgressDialog.setCancelable(false);
+
+
+
     }
 
     Handler handle = new Handler()
@@ -273,9 +271,6 @@ public class ViewClosing extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else
-            {
-                vibrate(ViewClosing.this.getActivity());
             }
         }
     };

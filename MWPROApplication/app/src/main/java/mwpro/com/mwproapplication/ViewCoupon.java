@@ -21,7 +21,6 @@
 package mwpro.com.mwproapplication;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -84,18 +83,6 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
     public static ViewCoupon newInstance() {
         ViewCoupon fragment = new ViewCoupon();
         return fragment;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        m_ctrlGift_One_Result.requestFocus();
-
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInputFromWindow(
-                m_ctrlGift_One_Result.getApplicationWindowToken(),
-                InputMethodManager.SHOW_FORCED, 0);
-        m_ctrlGift_One_Result.requestFocus();
     }
 
     @Override
@@ -290,6 +277,47 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         m_ctrlBtnConfirm.setOnClickListener(this);
         m_ctrlBtnMailing.setOnClickListener(this);
 
+        m_ctrlGift_One_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlGift_One_Result.setSelection(m_ctrlGift_One_Result.getText().toString().length());
+                m_ctrlGift_One_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlGift_Two_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlGift_Two_Result.setSelection(m_ctrlGift_Two_Result.getText().toString().length());
+
+                m_ctrlGift_Two_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlSponso_Red_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlSponso_Red_Result.setSelection(m_ctrlSponso_Red_Result.getText().toString().length());
+                m_ctrlSponso_Red_Result.requestFocus();
+                return false;
+            }
+        });
+
+        m_ctrlSponso_Result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                m_ctrlSponso_Result.setSelection(m_ctrlSponso_Result.getText().toString().length());
+                m_ctrlSponso_Result.requestFocus();
+                return false;
+            }
+        });
+
         return view;
     }
 
@@ -466,7 +494,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
 
         if(!Constants.ErrorNumber.equals("0")) {
             Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-            vibrate(ViewCoupon.this.getActivity());
+
             return;
         }
 
@@ -584,7 +612,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         }
         if(Constants.ErrorNumber.equals("270")) {
             Toast.makeText(ViewCoupon.this.getContext(), getButtonName("lab_MailingInProcess", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-            vibrate(ViewCoupon.this.getActivity());
+
             return;
         }
         if(Constants.ErrorNumber.equals("3")) {
@@ -636,8 +664,6 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         if(!Constants.ErrorNumber.equals("0"))
         {
             Toast.makeText(getContext(), getButtonName("lab_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(ViewCoupon.this.getActivity());
         }else
         {
             Toast.makeText(getContext(), getButtonName("lab_update_OK", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -683,9 +709,6 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
             customDialog.dismiss();
             if(msg.arg2 != Constants.NET_ERR) {
                 Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-                vibrate(ViewCoupon.this.getActivity());
-
                 return;
             }
             try {
@@ -708,7 +731,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
         {
             if(Constants.ErrorNumber.equals("270")) {
                 Toast.makeText(getContext(), getButtonName("lab_MailingInProcess", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-                vibrate(ViewCoupon.this.getActivity());
+
                 return;
             }else if(Constants.ErrorNumber.equals("3")) {
                 Toast.makeText(getContext(), getButtonName("lab_CB_Error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
@@ -722,7 +745,7 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
                 con.finish();
             }else {
                 Toast.makeText(getContext(), getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-                vibrate(ViewCoupon.this.getActivity());
+
                 return;
             }
 
@@ -780,15 +803,11 @@ public class ViewCoupon extends Fragment implements View.OnClickListener{
             {
                 Toast.makeText(getContext(), getButtonName("lab_NoCustomer", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                vibrate(ViewCoupon.this.getActivity());
-
                 return;
             }
         }else
         {
             Toast.makeText(getContext(), getButtonName("lab_NoCustomer", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(ViewCoupon.this.getActivity());
 
             return;
         }

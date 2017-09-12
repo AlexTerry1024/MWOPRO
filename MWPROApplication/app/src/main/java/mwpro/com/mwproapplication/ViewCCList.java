@@ -31,7 +31,6 @@ import de.codecrafters.tableview.model.TableColumnWeightModel;
 import mwpro.com.mwproapplication.data.Card;
 import mwpro.com.mwproapplication.data.MyTitles;
 import mwpro.com.mwproapplication.ui.CustomProgressDialog;
-import mwpro.com.mwproapplication.ui.MyImageTableDataAdapter;
 import mwpro.com.mwproapplication.ui.MySimpleTableDataAdapter;
 import mwpro.com.mwproapplication.ui.MySimpleTableHeaderAdapter;
 import mwpro.com.mwproapplication.ui.MyTableView;
@@ -47,38 +46,37 @@ public class ViewCCList extends Activity implements View.OnClickListener{
     MySimpleTableHeaderAdapter adapter = null;
     ArrayList<String[]> strData = new ArrayList<String[]>();
     ArrayList<String[]> strRealData = new ArrayList<String[]>();
-    MyImageTableDataAdapter myDataAdapter = null;
+    MySimpleTableDataAdapter myDataAdapter = null;
     CustomProgressDialog customDialog = null;
     ImageView m_ctrlBanner = null;
     Button m_ctrlCancel = null;
     Button m_ctrlChange = null;
     Button m_ctrlPay = null;
     int nSelected = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activate);
 
         m_ctrlTableView = (MyTableView)findViewById(R.id.tableView);
+
         m_ctrlBanner = (ImageView)findViewById(R.id.banner_button);
+
         m_ctrlCancel = (Button)findViewById(R.id.cancel);
         m_ctrlChange = (Button)findViewById(R.id.change);
         m_ctrlPay = (Button)findViewById(R.id.pay);
-
         strData.clear();
         strRealData.clear();
-
-        adapter = new MySimpleTableHeaderAdapter(ViewCCList.this , new String[] {getButtonName("lab_ccType", Constants.CurrentLang), getButtonName("lab_CBList", Constants.CurrentLang), getButtonName("lab_expdate", Constants.CurrentLang)});
+        adapter = new MySimpleTableHeaderAdapter(ViewCCList.this , new String[] {getButtonName("lab_CBList", Constants.CurrentLang), getButtonName("lab_expdate", Constants.CurrentLang)});
 
         m_ctrlTableView.setHeaderAdapter(adapter);
-        m_ctrlTableView.setColumnCount(3);
 
-        TableColumnWeightModel columnModel = new TableColumnWeightModel(3);
+        m_ctrlTableView.setColumnCount(2);
 
-        columnModel.setColumnWeight(0, 3);
-        columnModel.setColumnWeight(1, 7);
-        columnModel.setColumnWeight(2, 4);
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(2);
+
+        columnModel.setColumnWeight(0, 1);
+        columnModel.setColumnWeight(1, 1);
 
         m_ctrlTableView.setHeaderElevation(11);
 
@@ -173,8 +171,6 @@ public class ViewCCList extends Activity implements View.OnClickListener{
             if(msg.arg2 != Constants.NET_SUC) {
                 Toast.makeText(ViewCCList.this, getButtonName("lab_http_error", Constants.CurrentLang), Toast.LENGTH_LONG).show();
 
-                vibrate(ViewCCList.this);
-
                 return;
             }
 
@@ -194,8 +190,6 @@ public class ViewCCList extends Activity implements View.OnClickListener{
 
         if(Constants.ErrorNumber.equals("11")) {
             Toast.makeText(ViewCCList.this, getButtonName("lab_errorAssist", Constants.CurrentLang), Toast.LENGTH_LONG).show();
-
-            vibrate(ViewCCList.this);
 
             Intent i = new Intent(ViewCCList.this, MainActivity.class);
 
@@ -236,7 +230,7 @@ public class ViewCCList extends Activity implements View.OnClickListener{
                     {
                         JSONObject obj = arrays.getJSONObject(i);
 
-                        strData.add(new String[9]);
+                        strData.add(new String[8]);
 
                         Card card = new Card();
 
@@ -291,7 +285,6 @@ public class ViewCCList extends Activity implements View.OnClickListener{
                                 card.nImage = R.drawable.diners;
                             }
 
-                            strData.get(strData.size() - 1)[8] = "" + card.nImage;
                             card.strType = strType.substring(0, 4);
                         }
 
@@ -327,7 +320,7 @@ public class ViewCCList extends Activity implements View.OnClickListener{
                 {
                     JSONObject obj = dataObject.getJSONObject("Row");
 
-                    strData.add(new String[9]);
+                    strData.add(new String[8]);
 
                     Card card = new Card();
 
@@ -381,7 +374,7 @@ public class ViewCCList extends Activity implements View.OnClickListener{
                         {
                             card.nImage = R.drawable.diners;
                         }
-                        strData.get(strData.size() - 1)[8] = "" + card.nImage;
+
                         card.strType = strType.substring(0, 4);
                     }
 
@@ -420,13 +413,12 @@ public class ViewCCList extends Activity implements View.OnClickListener{
         }
         for(int i = 0; i < strData.size(); i ++)
         {
-            String[] perItem = new String[3];
+            String[] perItem = new String[2];
 
-            perItem[0] = strData.get(i)[8];
-            perItem[1] = strData.get(i)[4];
-            perItem[2] = strData.get(i)[5].length() == 1 ? "0" + strData.get(i)[5] : strData.get(i)[5] ;
+            perItem[0] = strData.get(i)[4];
+            perItem[1] = strData.get(i)[5].length() == 1 ? "0" + strData.get(i)[5] : strData.get(i)[5] ;
 
-            perItem[2] += "/" + strData.get(i)[6];
+            perItem[1] += "/" + strData.get(i)[6];
 
             strRealData.add(perItem);
         }
@@ -437,7 +429,7 @@ public class ViewCCList extends Activity implements View.OnClickListener{
             m_ctrlPay.setVisibility(View.VISIBLE);
         }
 
-        myDataAdapter = new MyImageTableDataAdapter(ViewCCList.this, strRealData);
+        myDataAdapter = new MySimpleTableDataAdapter(ViewCCList.this, strRealData);
 
         m_ctrlTableView.setDataAdapter(myDataAdapter);
     }
